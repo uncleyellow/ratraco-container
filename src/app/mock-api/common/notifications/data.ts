@@ -8,15 +8,15 @@ export const notifications = [
     {
         id         : '493190c9-5b61-4912-afe5-78c21f1044d7',
         icon       : 'heroicons_solid:star',
-        title      : 'Daily challenges',
-        description: 'Your submission has been accepted',
+        title      : 'AH1 đã đến ga Kim Liên',
+        description: 'Hàng của bạn đã đến nơi',
         time       : now.minus({minute: 25}).toISO(), // 25 minutes ago
         read       : false
     },
     {
         id         : '6e3e97e5-effc-4fb7-b730-52a151f0b641',
         image      : 'assets/images/avatars/male-04.jpg',
-        description: '<strong>Leo Gill</strong> added you to <em>Top Secret Project</em> group and assigned you as a <em>Project Manager</em>',
+        description: '<strong>ASY!</strong> đã báo cáo <em> đến ga Hà Nội</em> hàng đã được gửi <em>đến ga Hà Nội</em>',
         time       : now.minus({minute: 50}).toISO(), // 50 minutes ago
         read       : true,
         link       : '/dashboards/project',
@@ -25,8 +25,8 @@ export const notifications = [
     {
         id         : 'b91ccb58-b06c-413b-b389-87010e03a120',
         icon       : 'heroicons_solid:mail',
-        title      : 'Mailbox',
-        description: 'You have 15 unread mails across 3 mailboxes',
+        title      : 'ASY2 gặp sự cố',
+        description: 'Tàu ASY2 gặp sự cố tại Nha Trang',
         time       : now.minus({hour: 3}).toISO(), // 3 hours ago
         read       : false,
         link       : '/dashboards/project',
@@ -35,7 +35,7 @@ export const notifications = [
     {
         id         : '541416c9-84a7-408a-8d74-27a43c38d797',
         icon       : 'heroicons_solid:refresh',
-        title      : 'Cron jobs',
+        title      : 'AH10 chuẩn bị khởi động',
         description: 'Your <em>Docker container</em> is ready to publish',
         time       : now.minus({hour: 5}).toISO(), // 5 hours ago
         read       : false,

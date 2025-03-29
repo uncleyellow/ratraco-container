@@ -94,7 +94,7 @@ export const courses = [
         featured   : false,
         progress   : {
             currentStep: 6,
-            completed  : 0
+            completed  : 1
         }
     },
     {
@@ -174,9 +174,9 @@ export const courses = [
     },
     {
         id         : 'fcbfedbf-6187-4b3b-89d3-1a7cb4e11616',
-        title      : 'Personalize Your iOS App with Firebase User Management',
+        title      : 'AH11',
         slug       : 'personalize-your-ios-app-with-firebase-user-management',
-        description: 'Dive deep into User Management on iOS apps using Firebase',
+        description: 'Container Lanh AH11',
         category   : 'firebase',
         duration   : 90,
         totalSteps : 11,
@@ -189,9 +189,9 @@ export const courses = [
     },
     {
         id         : '5213f6a1-1dd7-4b1d-b6e9-ffb7af534f28',
-        title      : 'Customize Network Topology with Subnetworks',
+        title      : 'AH12',
         slug       : 'customize-network-topology-with-subnetworks',
-        description: 'Dive deep into Network Topology with Subnetworks',
+        description: 'Container Lanh AH12',
         category   : 'web',
         duration   : 45,
         totalSteps : 11,
@@ -204,9 +204,9 @@ export const courses = [
     },
     {
         id         : '02992ac9-d1a3-4167-b70e-8a1d5b5ba253',
-        title      : 'Building Beautiful UIs with Flutter',
+        title      : 'ABNN1',
         slug       : 'building-beautiful-uis-with-flutter',
-        description: 'Dive deep into Flutter\'s hidden secrets for creating beautiful UIs',
+        description: 'Container Lanh ABNN1',
         category   : 'web',
         duration   : 90,
         totalSteps : 11,
@@ -219,9 +219,9 @@ export const courses = [
     },
     {
         id         : '2139512f-41fb-4a4a-841a-0b4ac034f9b4',
-        title      : 'Firebase Android',
+        title      : 'ABNN2',
         slug       : 'firebase-android',
-        description: 'Beginners guide of Firebase for Android',
+        description: 'Container Lanh ABNN2',
         category   : 'android',
         duration   : 45,
         totalSteps : 11,
@@ -229,14 +229,14 @@ export const courses = [
         featured   : false,
         progress   : {
             currentStep: 0,
-            completed  : 0
+            completed  : 1
         }
     },
     {
         id         : '65e0a0e0-d8c0-4117-a3cb-eb74f8e28809',
-        title      : 'Simulating a Thread Network Using OpenThread',
+        title      : 'ABNN3',
         slug       : 'simulating-a-thread-network-using-openthread',
-        description: 'Introductory course for OpenThread and Simulating a Thread Network',
+        description: 'Container Lanh ABNN3',
         category   : 'web',
         duration   : 45,
         totalSteps : 11,
@@ -249,9 +249,9 @@ export const courses = [
     },
     {
         id         : 'c202ebc9-9be3-433a-9d38-7003b3ed7b7a',
-        title      : 'Your First Progressive Web App',
+        title      : 'AH12',
         slug       : 'your-first-progressive-web-app',
-        description: 'Step by step guide for creating a PWA from scratch',
+        description: 'Container Lanh AH12',
         category   : 'web',
         duration   : 30,
         totalSteps : 11,
@@ -264,9 +264,9 @@ export const courses = [
     },
     {
         id         : '980ae7da-9f77-4e30-aa98-1b1ea594e775',
-        title      : 'Launch Cloud Datalab',
+        title      : 'AH13',
         slug       : 'launch-cloud-datalab',
-        description: 'From start to finish: Launch Cloud Datalab',
+        description: 'Container Lanh AH13',
         category   : 'cloud',
         duration   : 60,
         totalSteps : 11,
@@ -279,9 +279,9 @@ export const courses = [
     },
     {
         id         : 'c9748ea9-4117-492c-bdb2-55085b515978',
-        title      : 'Cloud Firestore',
+        title      : 'AH14',
         slug       : 'cloud-firestore',
-        description: 'Step by step guide for setting up Cloud Firestore',
+        description: 'Container Lanh AH14',
         category   : 'firebase',
         duration   : 90,
         totalSteps : 11,
@@ -652,68 +652,68 @@ export const demoCourseContent = `
 export const demoCourseSteps = [
     {
         order   : 0,
-        title   : 'Introduction',
-        subtitle: 'Introducing the library and how it works',
-        content : `<h2 class="text-2xl sm:text-3xl">Introduction</h1> ${demoCourseContent}`
+        title   : 'Bắt đầu',
+        subtitle: 'Tàu bắt đầu khởi hành từ ga Hà Nội',
+        content : `<h2 class="text-2xl sm:text-3xl">Bắt đầu</h1> ${demoCourseContent}`
     },
     {
         order   : 1,
-        title   : 'Get the sample code',
-        subtitle: 'Where to find the sample code and how to access it',
-        content : `<h2 class="text-2xl sm:text-3xl">Get the sample code</h1> ${demoCourseContent}`
+        title   : 'Đến ga Kim Liên',
+        subtitle: 'Trả hàng Ga Kim Liên',
+        content : `<h2 class="text-2xl sm:text-3xl">Đến ga Kim Liên</h1> ${demoCourseContent}`
     },
     {
         order   : 2,
-        title   : 'Create a Firebase project and Set up your app',
-        subtitle: 'How to create a basic Firebase project and how to run it locally',
-        content : `<h2 class="text-2xl sm:text-3xl">Create a Firebase project and Set up your app</h1> ${demoCourseContent}`
+        title   : 'Đến ga Đà Nẵng',
+        subtitle: 'Trả hàng Ga Đà Nẵng',
+        content : `<h2 class="text-2xl sm:text-3xl">Đến ga Đà Nẵng</h1> ${demoCourseContent}`
     },
     {
         order   : 3,
-        title   : 'Install the Firebase Command Line Interface',
-        subtitle: 'Setting up the Firebase CLI to access command line tools',
-        content : `<h2 class="text-2xl sm:text-3xl">Install the Firebase Command Line Interface</h1> ${demoCourseContent}`
+        title   : 'Đến ga Diêu Trì',
+        subtitle: 'Trả hàng Ga Diêu Trì',
+        content : `<h2 class="text-2xl sm:text-3xl">Đến ga Diêu Trì</h1> ${demoCourseContent}`
     },
     {
         order   : 4,
-        title   : 'Deploy and run the web app',
-        subtitle: 'How to build, push and run the project remotely',
-        content : `<h2 class="text-2xl sm:text-3xl">Deploy and run the web app</h1> ${demoCourseContent}`
+        title   : 'Đến ga Đồng Đăng',
+        subtitle: 'Trả hàng Ga Đồng Đăng',
+        content : `<h2 class="text-2xl sm:text-3xl">Đến ga Đồng Đăng</h1> ${demoCourseContent}`
     },
     {
         order   : 5,
-        title   : 'The Functions Directory',
-        subtitle: 'Introducing the Functions and Functions Directory',
-        content : `<h2 class="text-2xl sm:text-3xl">The Functions Directory</h1> ${demoCourseContent}`
+        title   : 'Đến ga Nha Trang',
+        subtitle: 'Trả hàng Ga Nha Trang',
+        content : `<h2 class="text-2xl sm:text-3xl">Đến ga Nha Trang</h1> ${demoCourseContent}`
     },
     {
         order   : 6,
-        title   : 'Import the Cloud Functions and Firebase Admin modules',
-        subtitle: 'Create your first Function and run it to administer your app',
-        content : `<h2 class="text-2xl sm:text-3xl">Import the Cloud Functions and Firebase Admin modules</h1> ${demoCourseContent}`
+        title   : 'Đến ga Sài Gòn',
+        subtitle: 'Trả ng Ga Sài Gòn',
+        content : `<h2 class="text-2xl sm:text-3xl">Đến ga Sài Gòn</h1> ${demoCourseContent}`
     },
     {
         order   : 7,
-        title   : 'Welcome New Users',
-        subtitle: 'How to create a welcome message for the new users',
-        content : `<h2 class="text-2xl sm:text-3xl">Welcome New Users</h1> ${demoCourseContent}`
+        title   : 'Về ga Nha Trang',
+        subtitle: 'Đón khách ga Nha Trang',
+        content : `<h2 class="text-2xl sm:text-3xl">Về ga Nha Trang</h1> ${demoCourseContent}`
     },
     {
         order   : 8,
-        title   : 'Images moderation',
-        subtitle: 'How to moderate images; crop, resize, optimize',
-        content : `<h2 class="text-2xl sm:text-3xl">Images moderation</h1> ${demoCourseContent}`
+        title   : 'Về ga Đà Nẵng',
+        subtitle: 'Trả Khách ga Đà Nẵng',
+        content : `<h2 class="text-2xl sm:text-3xl">Về ga Đà Nẵng</h1> ${demoCourseContent}`
     },
     {
         order   : 9,
-        title   : 'New Message Notifications',
-        subtitle: 'How to create and push a notification to a user',
-        content : `<h2 class="text-2xl sm:text-3xl">New Message Notifications</h1> ${demoCourseContent}`
+        title   : 'Về ga Kim Liên',
+        subtitle: 'Trả khách ga Kim Liên',
+        content : `<h2 class="text-2xl sm:text-3xl">Về ga Kim Liên</h1> ${demoCourseContent}`
     },
     {
         order   : 10,
-        title   : 'Congratulations!',
-        subtitle: 'Nice work, you have created your first application',
-        content : `<h2 class="text-2xl sm:text-3xl">Congratulations!</h1> ${demoCourseContent}`
+        title   : 'Về ga Hà Nội',
+        subtitle: 'Bảo dưỡng xe tàu',
+        content : `<h2 class="text-2xl sm:text-3xl">Về ga Hà Nội!</h1> ${demoCourseContent}`
     }
 ];
