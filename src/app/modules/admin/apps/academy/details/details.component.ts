@@ -222,6 +222,9 @@ export class AcademyDetailsComponent implements OnInit, OnDestroy
                   });
                   this.goToNextStep()
             }
+            else{
+                return
+            }
           });
     }
 }

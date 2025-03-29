@@ -27,7 +27,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id   : 'dashboards.finance',
                 title: 'Thống kê tài chính',
                 type : 'basic',
-                icon : 'heroicons_outline:chart-pie',
+                icon : 'heroicons_outline:cash',
                 link : '/dashboards/finance'
             },
         ]
@@ -68,7 +68,7 @@ export const compactNavigation: FuseNavigationItem[] = [
                 id   : 'dashboards.finance',
                 title: 'Thống kê tài chính',
                 type : 'basic',
-                icon : 'heroicons_outline:chart-pie',
+                icon : 'heroicons_outline:cash',
                 link : '/dashboards/finance'
             },
         ]
@@ -109,7 +109,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
                 id   : 'dashboards.finance',
                 title: 'Thống kê tài chính',
                 type : 'basic',
-                icon : 'heroicons_outline:chart-pie',
+                icon : 'heroicons_outline:cash',
                 link : '/dashboards/finance'
             },
         ]
@@ -150,7 +150,7 @@ export const horizontalNavigation: FuseNavigationItem[] = [
                 id   : 'dashboards.finance',
                 title: 'Thống kê tài chính',
                 type : 'basic',
-                icon : 'heroicons_outline:chart-pie',
+                icon : 'heroicons_outline:cash',
                 link : '/dashboards/finance'
             },
         ]
