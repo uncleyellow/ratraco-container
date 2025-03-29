@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { Category, Course } from 'app/modules/admin/apps/academy/academy.types';
 import { AcademyService } from 'app/modules/admin/apps/academy/academy.service';
+import Swal from 'sweetalert2';
 
 @Component({
     selector       : 'academy-details',
@@ -199,5 +200,28 @@ export class AcademyDetailsComponent implements OnInit, OnDestroy
                 });
             }
         });
+    }
+
+    cofirm(){
+        Swal.fire({
+            title: "Xác Nhận?",
+            text: "Xác nhận đã đến vị trí!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Xác Nhận!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Công việc của bạn đã được lưu",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                  this.goToNextStep()
+            }
+          });
     }
 }

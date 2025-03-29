@@ -23,6 +23,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 icon : 'heroicons_outline:chart-pie',
                 link : '/dashboards/analytics'
             },
+            {
+                id   : 'dashboards.finance',
+                title: 'Thống kê tài chính',
+                type : 'basic',
+                icon : 'heroicons_outline:chart-pie',
+                link : '/dashboards/finance'
+            },
         ]
     },
     {
@@ -56,6 +63,13 @@ export const compactNavigation: FuseNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:chart-pie',
                 link : '/dashboards/analytics'
+            },
+            {
+                id   : 'dashboards.finance',
+                title: 'Thống kê tài chính',
+                type : 'basic',
+                icon : 'heroicons_outline:chart-pie',
+                link : '/dashboards/finance'
             },
         ]
     },
@@ -91,6 +105,13 @@ export const futuristicNavigation: FuseNavigationItem[] = [
                 icon : 'heroicons_outline:chart-pie',
                 link : '/dashboards/analytics'
             },
+            {
+                id   : 'dashboards.finance',
+                title: 'Thống kê tài chính',
+                type : 'basic',
+                icon : 'heroicons_outline:chart-pie',
+                link : '/dashboards/finance'
+            },
         ]
     },
     {
@@ -124,6 +145,13 @@ export const horizontalNavigation: FuseNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:chart-pie',
                 link : '/dashboards/analytics'
+            },
+            {
+                id   : 'dashboards.finance',
+                title: 'Thống kê tài chính',
+                type : 'basic',
+                icon : 'heroicons_outline:chart-pie',
+                link : '/dashboards/finance'
             },
         ]
     },

@@ -297,7 +297,14 @@ export const demoCourseContent = `
 <p class="lead">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aperiam lab et fugiat id magnam minus nemo quam
     voluptatem. Culpa deleniti explica nisi quod soluta.
+    <button (click)="openVideo()">
+        <mat-icon [svgIcon]="'heroicons_solid:play'"></mat-icon>
+        <span>Watch Video</span>
+    </button>
 </p>
+<p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aperiam lab et fugiat id magnam minus nemo quam
+    voluptatem. Culpa deleniti explica nisi quod soluta.
 <p>
     Alias animi labque, deserunt distinctio eum excepturi fuga iure labore magni molestias mollitia natus, officia pofro
     quis sunt temporibus veritatis voluptatem, voluptatum. Aut blanditiis esse et illum maxim, obcaecati possimus

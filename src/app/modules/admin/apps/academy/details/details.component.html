@@ -124,6 +124,11 @@
                     <ng-container *ngFor="let step of course.steps; trackBy: trackByFn">
                         <mat-tab>
                             <ng-template matTabContent>
+                                <button mat-raised-button color="primary" class="px-6 py-2 rounded-lg shadow-lg flex items-center gap-2" (click)="cofirm()">
+                                    <mat-icon>check_circle</mat-icon>
+                                    Xác Nhận
+                                  </button>
+                                  
                                 <div
                                     class="prose prose-sm max-w-3xl mx-auto sm:my-2 lg:mt-4 p-6 sm:p-10 sm:py-12 rounded-2xl shadow overflow-hidden bg-card"
                                     [innerHTML]="step.content"></div>
