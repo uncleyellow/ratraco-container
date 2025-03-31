@@ -4,10 +4,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from 'app/shared/data.service';
+import Swal from 'sweetalert2';
 
 @Component({
     selector     : 'example',
     templateUrl  : './example.component.html',
+    styleUrls    : ['./example.component.scss'],  // Thêm file SCSS ở đây
     encapsulation: ViewEncapsulation.None
 })
 export class ExampleComponent
@@ -88,4 +90,32 @@ displayedColumns: string[] = [];
         this.updateGoogleSheet(element); // Gửi dữ liệu lên Google Sheets nếu cần
       }
       
+
+      showDialog(){
+        Swal.fire({
+          title: "Let me do it for you?",
+          text: "Let me do it for you!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Let me do it for you!"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Let me do it for you",
+              width: 600,
+              padding: "3em",
+              color: "#716add",
+              background: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGlnMzh3ZzVqaHd0YmwxZ3VtM2l6dXMxM2tpcDV6enBtMmpsdm93NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XFIuke9XqFjk4Y1CaG/giphy.gif",
+              backdrop: `
+                rgba(0,0,123,0.4)
+                url("https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGlnMzh3ZzVqaHd0YmwxZ3VtM2l6dXMxM2tpcDV6enBtMmpsdm93NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XFIuke9XqFjk4Y1CaG/giphy.gif")
+                left top
+                no-repeat
+              `
+            });
+          }
+        });
+      }
 }

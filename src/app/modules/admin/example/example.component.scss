@@ -1,0 +1,30 @@
+.custom-button {
+    background-color: #3490dc;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+  
+    &:hover {
+      background-color: #2779bd;
+      transform: scale(1.05);
+    }
+  
+    &:active {
+      background-color: #1c3d5a;
+      transform: scale(0.95);
+    }
+  }
+  @keyframes heartbeat {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(2);
+    }
+  }
+  
+  .heartbeat {
+    animation: heartbeat 1.5s infinite ease-in-out;
+  }
+  
