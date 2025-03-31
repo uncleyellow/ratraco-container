@@ -1,36 +1,36 @@
 <div class="flex flex-col flex-auto min-w-0">
   <div class="flex-auto p-6 sm:p-10">
     <div class="h-400 min-h-400 max-h-400 border-2 border-dashed border-gray-300 rounded-2xl p-4 overflow-auto">
-      <table mat-table [dataSource]="dataSource" class="w-full bg-white rounded-xl shadow-md">
-
-        <!-- Duyệt qua từng cột -->
-        <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-          <th mat-header-cell *matHeaderCellDef class="p-2 bg-gray-200 text-gray-800">
-            {{ column }}
-          </th>
-          <td mat-cell *matCellDef="let element" class="p-2 text-center">
-            <!-- Cột có input date/time -->
-            <ng-container *ngIf="column === 'Bắt đầu dồn cắt' || column === 'Kết thúc cắt nối'; else textCell">
-              <input type="datetime-local" class="border p-1 rounded-md text-sm"
-                     [(ngModel)]="element[column]" (change)="calculateTimeDifference(element)">
-            </ng-container>
-
-            <!-- Cột chênh lệch thời gian chỉ hiển thị -->
-            <ng-container  *ngIf="column === 'Chênh lệch thời gian'; else textCell">
-              {{ element[column] }}
-            </ng-container>
-
-            <ng-template #textCell>{{ element[column] }}</ng-template>
-          </td>
-        </ng-container>
-
-        <thead>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-gray-100 text-gray-800"></tr>
-        </thead>
-        <tbody>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50"></tr>
-        </tbody>
-      </table>
-    </div>
+        <table mat-table [dataSource]="dataSource" class="w-full bg-white rounded-xl shadow-md">
+  
+          <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef class="p-2 bg-gray-200 text-gray-800">
+              {{ column }}
+            </th>
+            <td mat-cell *matCellDef="let element" class="p-2 text-center">
+              <ng-container *ngIf="column === 'Bắt đầu dồn cắt' || column === 'Kết thúc cắt nối'; else textCell">
+                <input type="datetime-local" class="border p-1 rounded-md text-sm"
+                [ngModel]="element[column]" 
+                (change)="updateDate(element, column, $event.target.value)">
+         
+         
+              </ng-container>
+  
+              <ng-container *ngIf="column === 'Chênh lệch thời gian'; else textCell">
+                {{ element[column] }}
+              </ng-container>
+  
+              <ng-template #textCell>{{ element[column] }}</ng-template>
+            </td>
+          </ng-container>
+  
+          <thead>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-gray-100 text-gray-800"></tr>
+          </thead>
+          <tbody>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50"></tr>
+          </tbody>
+        </table>
+      </div>
   </div>
 </div>

@@ -58,17 +58,34 @@ displayedColumns: string[] = [];
       }
 
        // Hàm tính chênh lệch thời gian
-  calculateTimeDifference(element: any) {
-    debugger
-    const start = new Date(element["Bắt đầu dồn cắt"]);
-    const end = new Date(element["Kết thúc cắt nối"]);
+       calculateTimeDifference(element: any) {
+        if (element["Bắt đầu dồn cắt"] && element["Kết thúc cắt nối"]) {
+          const startTime = new Date(element["Bắt đầu dồn cắt"]);
+          const endTime = new Date(element["Kết thúc cắt nối"]);
+          const diff = (endTime.getTime() - startTime.getTime()) / (1000 * 60); // Chênh lệch phút
+          element["Chênh lệch thời gian"] = diff.toFixed(2) + " phút";
+        }
+        this.updateGoogleSheet(element);
+      }
 
-    if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
-      const diffMs = end.getTime() - start.getTime();
-      const diffMins = Math.floor(diffMs / 60000); // Chuyển mili-giây thành phút
-      element["Chênh lệch thời gian"] = diffMins + " phút";
-    } else {
-      element["Chênh lệch thời gian"] = "";
-    }
-  }
+      updateGoogleSheet(element: any) {
+        const payload = {
+          values: [
+            [element["Bắt đầu dồn cắt"], element["Kết thúc cắt nối"], element["Chênh lệch thời gian"]]
+          ]
+        };
+    
+        this.http.post("http://localhost:3000/write", payload).subscribe(response => {
+          console.log("Dữ liệu cập nhật lên Google Sheets:", response);
+        }, error => {
+          console.error("Lỗi khi cập nhật dữ liệu:", error);
+        });
+      }
+
+      updateDate(element: any, column: string, value: string) {
+        console.log("Giá trị ngày giờ mới:", value); // Debug giá trị ngày giờ
+        element[column] = value; // Gán giá trị mới vào object
+        this.updateGoogleSheet(element); // Gửi dữ liệu lên Google Sheets nếu cần
+      }
+      
 }
