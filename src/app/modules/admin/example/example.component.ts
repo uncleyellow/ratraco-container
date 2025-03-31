@@ -102,6 +102,11 @@ displayedColumns: string[] = [];
           confirmButtonText: "Let me do it for you!"
         }).then((result) => {
           if (result.isConfirmed) {
+            // Tạo đối tượng âm thanh
+            let audio = new Audio('./assets/let-me-do-it-for-you.mp3');
+
+            // Phát nhạc
+            audio.play();
             Swal.fire({
               title: "Let me do it for you",
               width: 600,
