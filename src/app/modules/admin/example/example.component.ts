@@ -35,6 +35,7 @@ displayedColumns: string[] = [];
     }
     ngOnInit(): void {
         this.loadData();
+ 
       }
     
       loadData(): void {
@@ -79,6 +80,7 @@ displayedColumns: string[] = [];
     
         this.http.post("http://localhost:3000/write", payload).subscribe(response => {
           console.log("Dữ liệu cập nhật lên Google Sheets:", response);
+          this.loadData();
         }, error => {
           console.error("Lỗi khi cập nhật dữ liệu:", error);
         });
@@ -102,11 +104,14 @@ displayedColumns: string[] = [];
           confirmButtonText: "Let me do it for you!"
         }).then((result) => {
           if (result.isConfirmed) {
-            // Tạo đối tượng âm thanh
             let audio = new Audio('./assets/let-me-do-it-for-you.mp3');
-
+            
+            // Cho phép lặp lại nhạc
+            audio.loop = true;
+            
             // Phát nhạc
             audio.play();
+            
             Swal.fire({
               title: "Let me do it for you",
               width: 600,
