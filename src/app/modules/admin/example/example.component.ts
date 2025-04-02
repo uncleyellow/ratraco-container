@@ -61,37 +61,45 @@ displayedColumns: string[] = [];
       }
 
        // Hàm tính chênh lệch thời gian
-       calculateTimeDifference(element: any) {
-        if (element["Bắt đầu dồn cắt"] && element["Kết thúc cắt nối"]) {
-          const startTime = new Date(element["Bắt đầu dồn cắt"]);
-          const endTime = new Date(element["Kết thúc cắt nối"]);
-          const diff = (endTime.getTime() - startTime.getTime()) / (1000 * 60); // Chênh lệch phút
-          element["Chênh lệch thời gian"] = diff.toFixed(2) + " phút";
-        }
-        this.updateGoogleSheet(element);
-      }
+      //  calculateTimeDifference(element: any) {
+      //   if (element["Bắt đầu dồn cắt"] && element["Kết thúc cắt nối"]) {
+      //     const startTime = new Date(element["Bắt đầu dồn cắt"]);
+      //     const endTime = new Date(element["Kết thúc cắt nối"]);
+      //     const diff = (endTime.getTime() - startTime.getTime()) / (1000 * 60); // Chênh lệch phút
+      //     element["Chênh lệch thời gian"] = diff.toFixed(2) + " phút";
+      //   }
+      //   this.updateGoogleSheet(element);
+      // }
 
-      updateGoogleSheet(element: any) {
+      updateGoogleSheet(element: any, rowIndex: number) {
         const payload = {
-          values: [
-            [element["Bắt đầu dồn cắt"], element["Kết thúc cắt nối"], element["Chênh lệch thời gian"]]
-          ]
+            rowIndex: rowIndex + 6,  // Hàng trong Google Sheets (bắt đầu từ E6)
+            values: [
+                element["Bắt đầu dồn cắt"], 
+                element["Kết thúc cắt nối"]
+            ]
         };
     
+        console.log("Payload gửi lên:", payload); // Debug dữ liệu trước khi gửi
+    
         this.http.post("http://localhost:3000/write", payload).subscribe(response => {
-          console.log("Dữ liệu cập nhật lên Google Sheets:", response);
-          this.loadData();
+            console.log("Dữ liệu cập nhật lên Google Sheets:", response);
+            this.loadData();
         }, error => {
-          console.error("Lỗi khi cập nhật dữ liệu:", error);
+            console.error("Lỗi khi cập nhật dữ liệu:", error);
         });
-      }
-
-      updateDate(element: any, column: string, value: string) {
-        console.log("Giá trị ngày giờ mới:", value); // Debug giá trị ngày giờ
-        element[column] = value; // Gán giá trị mới vào object
-        this.updateGoogleSheet(element); // Gửi dữ liệu lên Google Sheets nếu cần
-      }
-      
+    }
+    
+    
+    
+    updateDate(element: any, column: string, value: string, index: number) {
+      console.log("Giá trị ngày giờ mới:", value); // Debug giá trị ngày giờ
+      console.log("Hàng được cập nhật:", index); // Kiểm tra chỉ số hàng
+      element[column] = value; // Gán giá trị mới vào object
+      this.updateGoogleSheet(element, index); // Gửi dữ liệu lên Google Sheets
+  }
+  
+    
 
       showDialog(){
         Swal.fire({

@@ -16,18 +16,20 @@
             <th mat-header-cell *matHeaderCellDef class="p-2 bg-gray-200 text-gray-800">
               {{ column }}
             </th>
-            <td mat-cell *matCellDef="let element" class="p-2 text-center">
+            <td mat-cell *matCellDef="let element; let i = index" class="p-2 text-center">
                 <!-- Nếu là cột nhập ngày giờ -->
-                <ng-container *ngIf="column === 'Bắt đầu dồn cắt' || column === 'Kết thúc cắt nối'; else textCell">
-                  <input type="datetime-local" class="border p-1 rounded-md text-sm"
-                         [(ngModel)]="element[column]" 
-                         (change)="updateDate(element, column, $event.target.value)">
-                </ng-container>
-              
-                <!-- Nếu là cột hiển thị giá trị khác -->
-                <ng-template #textCell>
-                  {{ element[column] }}
-                </ng-template>
+<!-- Nếu là cột nhập ngày giờ -->
+<ng-container *ngIf="column === 'Bắt đầu dồn cắt' || column === 'Kết thúc cắt nối'; else textCell">
+  <input type="datetime-local" class="border p-1 rounded-md text-sm"
+         [(ngModel)]="element[column]" 
+         (change)="updateDate(element, column, $event.target.value, i)">
+</ng-container>
+
+<!-- Nếu là cột hiển thị giá trị khác -->
+<ng-template #textCell>
+  {{ element[column] }}
+</ng-template>
+
               </td>
               
           </ng-container>
