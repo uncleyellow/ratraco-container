@@ -5,7 +5,7 @@ import Utf8 from 'crypto-js/enc-utf8';
 import { cloneDeep } from 'lodash-es';
 import { FuseMockApiService } from '@fuse/lib/mock-api';
 import { user as userData } from 'app/mock-api/common/user/data';
-
+import { vinh as userVinh } from 'app/mock-api/common/user/data';
 @Injectable({
     providedIn: 'root'
 })
@@ -13,7 +13,7 @@ export class AuthMockApi
 {
     private readonly _secret: any;
     private _user: any = userData;
-
+    private _userVinh: any = userVinh;
     /**
      * Constructor
      */
@@ -185,7 +185,7 @@ export class AuthMockApi
                         return [
                             200,
                             {
-                                user       : cloneDeep(this._user),
+                                user       : cloneDeep(this._userVinh),
                                 accessToken: this._generateJWTToken(),
                                 tokenType  : 'bearer'
                             }

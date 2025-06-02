@@ -280,4 +280,8 @@ export class ExampleComponent
             this.canEdit = false;
         }
     }
+
+    addNewRecord(){
+        
+    }
 }
