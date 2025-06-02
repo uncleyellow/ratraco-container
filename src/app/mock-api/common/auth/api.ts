@@ -69,6 +69,7 @@ export class AuthMockApi
                 // Sign in successful
                 if ( request.body.email === 'kiniemboquenjerry@gmail.com' && request.body.password === 'admin' )
                 {
+                    localStorage.setItem('userEmail', 'kiniemboquenjerry@gmail.com');
                     return [
                         200,
                         {
@@ -79,6 +80,117 @@ export class AuthMockApi
                     ];
                 }
 
+                // Sign in successful
+                if ( request.body.email === 'trangbom@gmail.com' && request.body.password === 'admin' )
+                    {
+                        localStorage.setItem('userEmail', 'trangbom@gmail.com');
+                        return [
+                            200,
+                            {
+                                user       : cloneDeep(this._user),
+                                accessToken: this._generateJWTToken(),
+                                tokenType  : 'bearer'
+                            }
+                        ];
+                    }
+
+                     // Sign in successful
+                if ( request.body.email === 'songthan@gmail.com' && request.body.password === 'admin' )
+                    {
+                        localStorage.setItem('userEmail', 'songthan@gmail.com');
+                        return [
+                            200,
+                            {
+                                user       : cloneDeep(this._user),
+                                accessToken: this._generateJWTToken(),
+                                tokenType  : 'bearer'
+                            }
+                        ];
+                    }
+
+                       // Sign in successful
+                if ( request.body.email === 'dieutri@gmail.com' && request.body.password === 'admin' )
+                    {
+                        localStorage.setItem('userEmail', 'dieutri@gmail.com');
+                        return [
+                            200,
+                            {
+                                user       : cloneDeep(this._user),
+                                accessToken: this._generateJWTToken(),
+                                tokenType  : 'bearer'
+                            }
+                        ];
+                    }
+
+                       // Sign in successful
+                if ( request.body.email === 'danang@gmail.com' && request.body.password === 'admin' )
+                    {
+                        localStorage.setItem('userEmail', 'danang@gmail.com');
+                        return [
+                            200,
+                            {
+                                user       : cloneDeep(this._user),
+                                accessToken: this._generateJWTToken(),
+                                tokenType  : 'bearer'
+                            }
+                        ];
+                    }
+
+                       // Sign in successful
+                if ( request.body.email === 'kimlien@gmail.com' && request.body.password === 'admin' )
+                    {
+                        localStorage.setItem('userEmail', 'kimlien@gmail.com');
+                        return [
+                            200,
+                            {
+                                user       : cloneDeep(this._user),
+                                accessToken: this._generateJWTToken(),
+                                tokenType  : 'bearer'
+                            }
+                        ];
+                    }
+
+                       // Sign in successful
+                if ( request.body.email === 'donganh@gmail.com' && request.body.password === 'admin' )
+                    {
+                        localStorage.setItem('userEmail', 'donganh@gmail.com');
+                        return [
+                            200,
+                            {
+                                user       : cloneDeep(this._user),
+                                accessToken: this._generateJWTToken(),
+                                tokenType  : 'bearer'
+                            }
+                        ];
+                    }
+
+                       // Sign in successful
+                if ( request.body.email === 'giapbat@gmail.com' && request.body.password === 'admin' )
+                    {
+                        localStorage.setItem('userEmail', 'giapbat@gmail.com');
+                        return [
+                            200,
+                            {
+                                user       : cloneDeep(this._user),
+                                accessToken: this._generateJWTToken(),
+                                tokenType  : 'bearer'
+                            }
+                        ];
+                    }
+
+                       // Sign in successful
+                if ( request.body.email === 'vinh@gmail.com' && request.body.password === 'admin' )
+                    {
+                        localStorage.setItem('userEmail', 'vinh@gmail.com');
+                        return [
+                            200,
+                            {
+                                user       : cloneDeep(this._user),
+                                accessToken: this._generateJWTToken(),
+                                tokenType  : 'bearer'
+                            }
+                        ];
+                    }
                 // Invalid credentials
                 return [
                     404,
