@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from 'app/shared/data.service';
 import Swal from 'sweetalert2';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector     : 'example',
@@ -53,7 +54,7 @@ export class ExampleComponent
     }
     
     loadData(): void {
-        this.http.get<{ data: any[][] }>(`http://localhost:3000/${this.selectedTable}`).subscribe(response => {
+        this.http.get<{ data: any[][] }>(`${environment.apiUrl}/${this.selectedTable}`).subscribe(response => {
             if (response.data.length > 0) {
                 this.displayedColumns = this.columnNames.slice(0, response.data[0].length);
                 
@@ -98,7 +99,7 @@ export class ExampleComponent
     
         console.log("Payload gửi lên:", payload); // Debug dữ liệu trước khi gửi
     
-        this.http.post(`http://localhost:3000/${this.selectedTable}/write`, payload).subscribe(response => {
+        this.http.post(`${environment.apiUrl}/${this.selectedTable}/write`, payload).subscribe(response => {
             console.log("Dữ liệu cập nhật lên Google Sheets:", response);
             this.loadData();
         }, error => {
