@@ -36,27 +36,111 @@
                     <!-- Header Row -->
                     <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
                         <th mat-header-cell *matHeaderCellDef 
-                            class="px-6 py-4 bg-gray-50 text-gray-700 font-semibold text-sm uppercase tracking-wider">
+                            class="px-6 py-4 bg-gray-50 text-gray-700 font-semibold text-sm uppercase tracking-wider"
+                            [ngClass]="{
+                                'min-w-[150px]': column === 'Mác tàu',
+                                'min-w-[120px]': column === 'Số lượng xe cắt' || column === 'Số lượng xe nối'
+                            }">
                             {{ column }}
                         </th>
                         <td mat-cell *matCellDef="let element; let i = index" 
-                            class="px-6 py-4 text-sm text-gray-600 border-t border-gray-200">
-                            <!-- Date Input Fields -->
-                            <ng-container *ngIf="column === 'Bắt đầu dồn cắt' || column === 'Kết thúc cắt nối'; else textCell">
-                                <div class="relative">
+                            class="px-6 py-4 text-sm text-gray-600 border-t border-gray-200"
+                            [ngClass]="{
+                                'min-w-[150px]': column === 'Mác tàu',
+                                'min-w-[120px]': column === 'Số lượng xe cắt' || column === 'Số lượng xe nối'
+                            }">
+                            <div [ngSwitch]="column">
+                                <!-- Editable Text Columns -->
+                                <ng-container *ngSwitchCase="'Mác tàu'">
+                                    <input type="text" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                           [(ngModel)]="element[column]" 
+                                           (change)="updateCellValue(element, column, $event.target.value, i)"
+                                           [value]="element[column]" 
+                                           [attr.disabled]="!canEdit ? true : null" 
+                                           placeholder="Nhập Mác tàu" 
+                                           id="mac-tau-{{i}}">
+                                </ng-container>
+
+                                <!-- Editable Datetime Columns -->
+                                <ng-container *ngSwitchCase="'Ngày giờ tàu đến ga'">
                                     <input type="datetime-local" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
-                                           (change)="updateDate(element, column, $event.target.value, i)"
+                                           (change)="updateCellValue(element, column, $event.target.value, i)"
                                            [value]="element[column]"
-                                           [disabled]="!canEdit">
-                                </div>
-                            </ng-container>
+                                           [attr.disabled]="!canEdit ? true : null" 
+                                           placeholder="Chọn ngày giờ tàu đến ga" 
+                                           id="ngay-den-ga-{{i}}">
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'Giờ bắt đầu dồn cắt nối xe'">
+                                    <input type="datetime-local" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                           [(ngModel)]="element[column]" 
+                                           (change)="updateCellValue(element, column, $event.target.value, i)"
+                                           [value]="element[column]"
+                                           [attr.disabled]="!canEdit ? true : null" 
+                                           placeholder="Chọn giờ tàu đến" 
+                                           id="gio-den-{{i}}">
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'Giờ kết thúc cắt nối xe'">
+                                    <input type="datetime-local" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                           [(ngModel)]="element[column]" 
+                                           (change)="updateCellValue(element, column, $event.target.value, i)"
+                                           [value]="element[column]"
+                                           [attr.disabled]="!canEdit ? true : null" 
+                                           placeholder="Chọn thời gian dồn cắt" 
+                                           id="bat-dau-don-cat-{{i}}">
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'Kết thúc cắt nối'">
+                                    <input type="datetime-local" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                           [(ngModel)]="element[column]" 
+                                           (change)="updateCellValue(element, column, $event.target.value, i)"
+                                           [value]="element[column]"
+                                           [attr.disabled]="!canEdit ? true : null" 
+                                           placeholder="Chọn thời gian kết thúc cắt nối" 
+                                           id="ket-thuc-cat-noi-{{i}}">
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'Ngày giờ tàu chạy'">
+                                    <input type="datetime-local" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                           [(ngModel)]="element[column]" 
+                                           (change)="updateCellValue(element, column, $event.target.value, i)"
+                                           [value]="element[column]"
+                                           [attr.disabled]="!canEdit ? true : null" 
+                                           placeholder="Chọn Ngày giờ tàu chạy" 
+                                           id="thoi-gian-tau-chay-{{i}}">
+                                </ng-container>
 
-                            <!-- Regular Text Cells -->
-                            <ng-template #textCell>
-                                <span class="text-gray-700">{{ element[column] }}</span>
-                            </ng-template>
+                                <!-- Editable Number Columns -->
+                                <ng-container *ngSwitchCase="'Số lượng xe cắt'">
+                                    <input type="number" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                           [(ngModel)]="element[column]" 
+                                           (change)="updateCellValue(element, column, $event.target.value, i)"
+                                           [value]="element[column]" 
+                                           [attr.disabled]="!canEdit ? true : null" 
+                                           placeholder="Nhập số lượng xe cắt" 
+                                           id="so-luong-xe-cat-{{i}}">
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'Số lượng xe nối'">
+                                    <input type="number" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                           [(ngModel)]="element[column]" 
+                                           (change)="updateCellValue(element, column, $event.target.value, i)"
+                                           [value]="element[column]" 
+                                           [attr.disabled]="!canEdit ? true : null" 
+                                           placeholder="Nhập số lượng xe nối" 
+                                           id="so-luong-xe-noi-{{i}}">
+                                </ng-container>
+
+                                <!-- Read-only Columns -->
+                                <ng-container *ngSwitchDefault>
+                                    <span class="text-gray-700">{{ element[column] }}</span>
+                                </ng-container>
+                            </div>
                         </td>
                     </ng-container>
 

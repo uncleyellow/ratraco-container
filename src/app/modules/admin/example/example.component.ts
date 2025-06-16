@@ -15,7 +15,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class ExampleComponent
 {
-    userEmail: string;
+    userEmail: string = ''; // Đảm bảo luôn có giá trị mặc định
     displayedColumns: string[] = [];
     dataSource = new MatTableDataSource<any>([]);
     selectedTable: string = 'trangbom'; // Default table
@@ -31,10 +31,18 @@ export class ExampleComponent
         { value: 'vinh', label: 'Vinh' },
     ];
     columnNames = [
-        "STT", "Mác tàu", "Ngày tàu đến ga", "Giờ tàu đến", "Bắt đầu dồn cắt", "Kết thúc cắt nối",
-        "Số lượng xe cắt", "Số lượng xe nối", "Giờ tàu xuất phát", "Chênh lệch thời gian",
-        "Đến", "Đi", "Xe có vận đơn", "Toa xe có vận đơn", "Rổ số lượng xe cắt", "Ghi chú"
-    ]; // Định nghĩa tên cột
+        "STT", 
+        "Mác tàu", 
+        "Ngày giờ tàu đến ga", 
+        "Giờ bắt đầu dồn cắt nối xe", 
+        "Giờ kết thúc cắt nối xe", 
+        "Số lượng xe cắt", 
+        "Số lượng xe nối", 
+        "Ngày giờ tàu chạy", 
+        "Dừng tại Ga", 
+        "Thời gian theo biểu đồ", 
+        "Chênh lệch theo biểu đồ"
+    ]; // Định nghĩa tên cột dựa trên dữ liệu API
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
     /**
@@ -47,36 +55,57 @@ export class ExampleComponent
     {
         // Get email from localStorage
         this.userEmail = localStorage.getItem('userEmail') || '';
+        console.log("Constructor: userEmail =", this.userEmail); // Log trong constructor
     }
     ngOnInit(): void {
+        console.log("ngOnInit: userEmail before checkPermission =", this.userEmail); // Log trước khi gọi checkPermission
         this.loadData();
         this.checkPermission();
+        console.log("ngOnInit: canEdit after checkPermission =", this.canEdit); // Log sau khi gọi checkPermission
     }
     
     loadData(): void {
         this.http.get<{ data: any[][] }>(`${environment.apiUrl}/${this.selectedTable}`).subscribe(response => {
+            console.log("Dữ liệu gốc từ API:", response.data); // Log dữ liệu gốc
+
             if (response.data.length > 0) {
-                this.displayedColumns = this.columnNames.slice(0, response.data[0].length);
+                this.displayedColumns = this.columnNames.slice(0, 11);
+                console.log("displayedColumns after assignment:", this.displayedColumns); // Thêm log này
                 
                 // Chuyển đổi dữ liệu để Angular Table đọc được
                 this.dataSource.data = response.data.slice(1).map(row => {
                     let rowData: any = {};
                     this.displayedColumns.forEach((col, index) => {
-                        if (col === 'Bắt đầu dồn cắt' || col === 'Kết thúc cắt nối') {
+                        // Debugging logs for specific columns
+                        if (col === 'Mác tàu' || col === 'Số lượng xe cắt' || col === 'Số lượng xe nối') {
+                            console.log(`Column: ${col}, Original Value: ${row[index]}, Index: ${index}`);
+                        }
+
+                        // Áp dụng parseDateForInput cho các cột ngày giờ cụ thể
+                        if (col === 'Ngày giờ tàu đến ga' || col === 'Giờ bắt đầu dồn cắt nối xe' || col === 'Giờ kết thúc cắt nối xe' || col === 'Kết thúc cắt nối' || col === 'Ngày giờ tàu chạy') {
                             const dateStr = row[index];
                             if (dateStr && dateStr.trim() !== '') {
-                                // Parse và format date cho input datetime-local
                                 const formattedDate = this.parseDateForInput(dateStr);
                                 rowData[col] = formattedDate;
                             } else {
                                 rowData[col] = '';
                             }
+                        } else if (col === 'STT' || col === 'Số lượng xe cắt' || col === 'Số lượng xe nối') {
+                            // Chuyển đổi sang kiểu số cho các cột số lượng
+                            rowData[col] = Number(row[index]);
                         } else {
-                            rowData[col] = row[index];
+                            // Gán giá trị gốc cho các cột khác (ví dụ: Mác tàu)
+                            rowData[col] = String(row[index]);
+                        }
+                        if (col === 'Mác tàu' || col === 'Số lượng xe cắt' || col === 'Số lượng xe nối') {
+                            console.log(`Column: ${col}, Processed Value: ${rowData[col]}`);
                         }
                     });
                     return rowData;
                 });
+
+                // Log the final data assigned to the table
+                console.log("Final dataSource.data:", this.dataSource.data);
             }
         });
     }
@@ -89,25 +118,61 @@ export class ExampleComponent
     }
 
     updateGoogleSheet(element: any, rowIndex: number) {
+        // Các cột cần gửi lên (Mác tàu, Ngày giờ tàu đến ga, Giờ bắt đầu dồn cắt nối xe, Giờ kết thúc cắt nối xe, Số lượng xe cắt, Số lượng xe nối)
+        // Dựa trên thứ tự cột mới
+        const editableColumns = [
+            "Mác tàu", 
+            "Ngày giờ tàu đến ga", 
+            "Giờ bắt đầu dồn cắt nối xe", 
+            "Giờ kết thúc cắt nối xe", 
+            "Số lượng xe cắt", 
+            "Số lượng xe nối",
+            "Ngày giờ tàu chạy"
+        ];
+
+        const valuesToSend = editableColumns.map(col => {
+            // Đối với các cột ngày giờ, sử dụng giá trị đã định dạng nếu có
+            if (col === 'Ngày giờ tàu đến ga' || col === 'Giờ bắt đầu dồn cắt nối xe' || col === 'Giờ kết thúc cắt nối xe' || col === 'Kết thúc cắt nối' || col === 'Ngày giờ tàu chạy') {
+                // Đảm bảo gửi định dạng YYYY/MM/DD HH:mm:ss
+                const date = new Date(element[col]);
+                if (!isNaN(date.getTime())) {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    const seconds = '00';
+                    return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+                } else {
+                    return ''; // Trả về chuỗi rỗng nếu không hợp lệ
+                }
+            } else {
+                return element[col];
+            }
+        });
+
         const payload = {
-            rowIndex: rowIndex + 6,
-            values: [
-                element["Bắt đầu dồn cắt"], 
-                element["Kết thúc cắt nối"]
-            ]
+            rowIndex: rowIndex + 6, // Điều chỉnh rowIndex để khớp với Google Sheet (ví dụ: +6 vì dữ liệu bắt đầu từ hàng 7)
+            values: valuesToSend
         };
     
         console.log("Payload gửi lên:", payload); // Debug dữ liệu trước khi gửi
     
         this.http.post(`${environment.apiUrl}/${this.selectedTable}/write`, payload).subscribe(response => {
             console.log("Dữ liệu cập nhật lên Google Sheets:", response);
-            this.loadData();
+            // Không cần loadData ở đây, vì việc này có thể gây gián đoạn nhập liệu.
+            // Dữ liệu sẽ được cập nhật khi người dùng hoàn thành chỉnh sửa hoặc làm mới trang.
         }, error => {
             console.error("Lỗi khi cập nhật dữ liệu:", error);
+            Swal.fire({
+                title: 'Lỗi',
+                text: 'Lỗi khi cập nhật dữ liệu: ' + error.message,
+                icon: 'error'
+            });
         });
     }
     
-    updateDate(element: any, column: string, value: string, index: number) {
+    updateCellValue(element: any, column: string, value: any, index: number) {
         if (!this.canEdit) {
             Swal.fire({
                 title: 'Không có quyền chỉnh sửa',
@@ -117,35 +182,31 @@ export class ExampleComponent
             return;
         }
 
-        console.log("Giá trị ngày giờ mới từ input:", value);
-        console.log("Hàng được cập nhật:", index);
+        console.log(`Cập nhật cột '${column}' với giá trị: '${value}' tại hàng: ${index}`);
         
-        if (!value) {
-            element[column] = '';
-        } else {
-            try {
-                const date = new Date(value);
-                if (!isNaN(date.getTime())) {
-                    const year = date.getFullYear();
-                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                    const day = String(date.getDate()).padStart(2, '0');
-                    const hours = String(date.getHours()).padStart(2, '0');
-                    const minutes = String(date.getMinutes()).padStart(2, '0');
-                    const seconds = '00';
-                    
-                    const formattedDate = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-                    element[column] = formattedDate;
-                } else {
-                    console.error('Invalid date from input:', value);
+        if (column === 'Ngày giờ tàu đến ga' || column === 'Giờ bắt đầu dồn cắt nối xe' || column === 'Giờ kết thúc cắt nối xe' || column === 'Kết thúc cắt nối' || column === 'Ngày giờ tàu chạy') {
+            if (!value) {
+                element[column] = '';
+            } else {
+                try {
+                    const date = new Date(value); // Input value from datetime-local is YYYY-MM-DDThh:mm
+                    if (!isNaN(date.getTime())) {
+                        // Gán trực tiếp giá trị định dạng ISO cho input datetime-local
+                        element[column] = value; 
+                    } else {
+                        console.error('Invalid date from input:', value);
+                        element[column] = '';
+                    }
+                } catch (error) {
+                    console.error('Error processing date for column:', column, value, error);
                     element[column] = '';
                 }
-            } catch (error) {
-                console.error('Error formatting date for server:', value, error);
-                element[column] = '';
             }
+        } else {
+            element[column] = value; // Gán trực tiếp cho các cột khác
         }
         
-        this.updateGoogleSheet(element, index);
+        this.updateGoogleSheet(element, index); // Gọi hàm update sau khi thay đổi giá trị
     }
 
     showDialog(){
@@ -193,44 +254,39 @@ export class ExampleComponent
         }
 
         try {
-            // Thử parse với định dạng YYYY/MM/DD HH:mm:ss
-            const parts = dateStr.split(' ');
-            if (parts.length === 2) {
-                const dateParts = parts[0].split('/');
-                const timeParts = parts[1].split(':');
+            let date: Date;
 
-                if (dateParts.length === 3 && timeParts.length >= 2) {
-                    const year = dateParts[0];
-                    const month = dateParts[1];
-                    const day = dateParts[2];
-                    const hours = timeParts[0];
-                    const minutes = timeParts[1];
+            // Try YYYY-MM-DD HH:mm or YYYY/MM/DD HH:mm (from backend or input)
+            // This pattern handles both hyphens and slashes for dates, and optional seconds
+            const ymd_hms_regex = /^(\d{4})[\/\-](\d{2})[\/\-](\d{2})\s+(\d{2}):(\d{2})(?::(\d{2}))?$/;
+            let match = dateStr.match(ymd_hms_regex);
 
-                    // Kiểm tra tính hợp lệ cơ bản
-                    if (year && month && day && hours && minutes) {
-                        // Tạo chuỗi định dạng YYYY-MM-DDThh:mm
-                        const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
-                        
-                        // Kiểm tra xem chuỗi có tạo ra ngày hợp lệ không
-                        const testDate = new Date(formattedDate);
-                        if (!isNaN(testDate.getTime())) {
-                            console.log('Successfully parsed and formatted as YYYY-MM-DDThh:mm:', formattedDate); // Log successful parse
-                            return formattedDate;
-                        }
-                    }
+            if (match) {
+                const [_, year, month, day, hours, minutes, seconds = '00'] = match;
+                // Construct ISO 8601 string for Date object
+                date = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
+            } else {
+                // Try DD/MM/YYYY HH:mm:ss or DD/MM/YYYY (from Google Sheet)
+                const dmy_hms_regex = /^(\d{2})[\/\-](\d{2})[\/\-](\d{4})(?:\s+(\d{2}):(\d{2})(?::(\d{2}))?)?$/;
+                match = dateStr.match(dmy_hms_regex);
+                if (match) {
+                    const [_, day, month, year, hours = '00', minutes = '00', seconds = '00'] = match;
+                    // Construct ISO 8601 string for Date object
+                    date = new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}`);
+                } else {
+                    // Fallback to direct Date object creation (may handle other formats)
+                    date = new Date(dateStr);
                 }
             }
-            // Nếu không parse được với định dạng YYYY/MM/DD HH:mm:ss, thử tạo đối tượng Date trực tiếp
-            // Date object có thể parse một số định dạng khác
-            const directDate = new Date(dateStr);
-            if (!isNaN(directDate.getTime())) {
-                const year = directDate.getFullYear();
-                const month = String(directDate.getMonth() + 1).padStart(2, '0');
-                const day = String(directDate.getDate()).padStart(2, '0');
-                const hours = String(directDate.getHours()).padStart(2, '0');
-                const minutes = String(directDate.getMinutes()).padStart(2, '0');
+            
+            if (!isNaN(date.getTime())) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
                 const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
-                console.log('Parsed using new Date() and formatted as YYYY-MM-DDThh:mm:', formattedDate); // Log fallback parse
+                console.log('Successfully parsed and formatted as YYYY-MM-DDThh:mm:', formattedDate);
                 return formattedDate;
             }
 
@@ -250,6 +306,7 @@ export class ExampleComponent
     }
 
     checkPermission() {
+        debugger
         if (this.userEmail === 'kiniemboquenjerry@gmail.com') {
             this.canEdit = true;
         }
@@ -283,6 +340,37 @@ export class ExampleComponent
     }
 
     addNewRecord(){
+        if (!this.canEdit) {
+            Swal.fire({
+                title: 'Không có quyền chỉnh sửa',
+                text: 'Bạn chỉ có quyền chỉnh sửa bảng Trảng Bom',
+                icon: 'warning'
+            });
+            return;
+        }
+
+        const newRow: any = {};
+        // Khởi tạo các cột với giá trị trống
+        this.columnNames.forEach(col => {
+            newRow[col] = '';
+        });
+
+        // Gán STT cho hàng mới (STT = số hàng hiện có + 1)
+        newRow["STT"] = this.dataSource.data.length + 1;
+
+        // Thêm hàng mới vào dataSource
+        const currentData = this.dataSource.data;
+        this.dataSource.data = [...currentData, newRow];
         
+        // Tùy chọn: Scroll đến hàng mới nếu có paginator
+        if (this.paginator) {
+            this.paginator.lastPage();
+        }
+
+        // Gợi ý: Nếu bạn muốn tự động gửi hàng mới này lên sheets ngay lập tức,
+        // bạn cần một API endpoint khác để 'append' hàng mới vào cuối sheets,
+        // thay vì 'update' một rowIndex cụ thể. Hoặc nếu bạn muốn 'update'
+        // hàng này, bạn cần biết rowIndex tiếp theo trên Google Sheets.
+        // Hiện tại, việc update sẽ được kích hoạt khi người dùng chỉnh sửa hàng này.
     }
 }
