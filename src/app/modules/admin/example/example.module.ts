@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { AddRecordDialogComponent } from '../add-record-dialog/add-record-dialog.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const exampleRoutes: Route[] = [
     {
@@ -20,7 +22,8 @@ const exampleRoutes: Route[] = [
 
 @NgModule({
     declarations: [
-        ExampleComponent
+        ExampleComponent,
+        AddRecordDialogComponent
     ],
     imports     : [
         RouterModule.forChild(exampleRoutes),
@@ -33,6 +36,8 @@ const exampleRoutes: Route[] = [
         MatIconModule,
         MatSelectModule,
         MatFormFieldModule, 
+        ReactiveFormsModule,
+        FormsModule
     ]
 })
 export class ExampleModule

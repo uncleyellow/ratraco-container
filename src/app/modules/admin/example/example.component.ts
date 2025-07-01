@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { DataService } from 'app/shared/data.service';
 import Swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
+import { AddRecordDialogComponent } from '../add-record-dialog/add-record-dialog.component';
 
 @Component({
     selector     : 'example',
@@ -45,6 +46,22 @@ export class ExampleComponent
     ]; // Định nghĩa tên cột dựa trên dữ liệu API
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
+    showAddDialog = false;
+    addDialogColumns: string[] = [
+        "STT",
+        "Mác tàu", 
+        "Ngày giờ tàu đến ga", 
+        "Giờ bắt đầu dồn cắt nối xe", 
+        "Giờ kết thúc cắt nối xe", 
+        "Số lượng xe cắt", 
+        "Số lượng xe nối", 
+        "Ngày giờ tàu chạy", 
+        "Đến", "Đi", "Số xe có vận đơn của Rat chạy trong tàu Cty khác", "Số hiệu toa xe có vận đơn không phải của Rat", "Ghi chú (ghi rõ số lượng xe cắt, nối)",
+        "Dừng tại Ga", 
+        "Thời gian theo biểu đồ", 
+        "Chênh lệch theo biểu đồ", 
+        // "Đến", "Đi", "Số xe có vận đơn của Rat chạy trong tàu Cty khác", "Số hiệu toa xe có vận đơn không phải của Rat", "Ghi chú (ghi rõ số lượng xe cắt, nối)"
+    ];
     /**
      * Constructor
      */
@@ -69,7 +86,7 @@ export class ExampleComponent
             console.log("Dữ liệu gốc từ API:", response.data); // Log dữ liệu gốc
 
             if (response.data.length > 0) {
-                this.displayedColumns = this.columnNames.slice(0, 11);
+                this.displayedColumns = this.addDialogColumns.slice(0, 16);
                 console.log("displayedColumns after assignment:", this.displayedColumns); // Thêm log này
                 
                 // Chuyển đổi dữ liệu để Angular Table đọc được
@@ -93,9 +110,12 @@ export class ExampleComponent
                         } else if (col === 'STT' || col === 'Số lượng xe cắt' || col === 'Số lượng xe nối') {
                             // Chuyển đổi sang kiểu số cho các cột số lượng
                             rowData[col] = Number(row[index]);
+                        } else if (col === 'Số xe có vận đơn của Rat chạy trong tàu Cty khác') {
+                            // Chuyển đổi sang kiểu số cho cột số xe Rat
+                            rowData[col] = Number(row[index]) || 0;
                         } else {
-                            // Gán giá trị gốc cho các cột khác (ví dụ: Mác tàu)
-                            rowData[col] = String(row[index]);
+                            // Gán giá trị gốc cho các cột khác (ví dụ: Mác tàu, Đến, Đi, Ghi chú, etc.)
+                            rowData[col] = String(row[index] || '');
                         }
                         if (col === 'Mác tàu' || col === 'Số lượng xe cắt' || col === 'Số lượng xe nối') {
                             console.log(`Column: ${col}, Processed Value: ${rowData[col]}`);
@@ -127,7 +147,15 @@ export class ExampleComponent
             "Giờ kết thúc cắt nối xe", 
             "Số lượng xe cắt", 
             "Số lượng xe nối",
-            "Ngày giờ tàu chạy"
+            "Ngày giờ tàu chạy",
+            // "Dừng tại Ga", 
+            // "Thời gian theo biểu đồ", 
+            // "Chênh lệch theo biểu đồ", 
+            "Đến",
+            "Đi",
+            "Số xe có vận đơn của Rat chạy trong tàu Cty khác",
+            "Số hiệu toa xe có vận đơn không phải của Rat",
+            "Ghi chú (ghi rõ số lượng xe cắt, nối)"
         ];
 
         const valuesToSend = editableColumns.map(col => {
@@ -160,7 +188,7 @@ export class ExampleComponent
     
         this.http.post(`${environment.apiUrl}/${this.selectedTable}/write`, payload).subscribe(response => {
             console.log("Dữ liệu cập nhật lên Google Sheets:", response);
-            this.loadData();
+            // this.loadData();
             // Không cần loadData ở đây, vì việc này có thể gây gián đoạn nhập liệu.
             // Dữ liệu sẽ được cập nhật khi người dùng hoàn thành chỉnh sửa hoặc làm mới trang.
         }, error => {
@@ -203,8 +231,12 @@ export class ExampleComponent
                     element[column] = '';
                 }
             }
+        } else if (column === 'Số lượng xe cắt' || column === 'Số lượng xe nối' || column === 'Số xe có vận đơn của Rat chạy trong tàu Cty khác') {
+            // Xử lý các cột số
+            element[column] = value ? Number(value) : 0;
         } else {
-            element[column] = value; // Gán trực tiếp cho các cột khác
+            // Xử lý các cột text (bao gồm cả textarea)
+            element[column] = value || '';
         }
         
         this.updateGoogleSheet(element, index); // Gọi hàm update sau khi thay đổi giá trị
@@ -350,29 +382,31 @@ export class ExampleComponent
             });
             return;
         }
-
-        const newRow: any = {};
-        // Khởi tạo các cột với giá trị trống
-        this.columnNames.forEach(col => {
-            newRow[col] = '';
-        });
-
-        // Gán STT cho hàng mới (STT = số hàng hiện có + 1)
-        newRow["STT"] = this.dataSource.data.length + 1;
-
-        // Thêm hàng mới vào dataSource
-        const currentData = this.dataSource.data;
-        this.dataSource.data = [...currentData, newRow];
-        
-        // Tùy chọn: Scroll đến hàng mới nếu có paginator
-        if (this.paginator) {
-            this.paginator.lastPage();
+        if(this.canEdit){
+            
         }
+    }
 
-        // Gợi ý: Nếu bạn muốn tự động gửi hàng mới này lên sheets ngay lập tức,
-        // bạn cần một API endpoint khác để 'append' hàng mới vào cuối sheets,
-        // thay vì 'update' một rowIndex cụ thể. Hoặc nếu bạn muốn 'update'
-        // hàng này, bạn cần biết rowIndex tiếp theo trên Google Sheets.
-        // Hiện tại, việc update sẽ được kích hoạt khi người dùng chỉnh sửa hàng này.
+    openAddDialog() {
+        this.showAddDialog = true;
+    }
+    closeAddDialog() {
+        this.showAddDialog = false;
+    }
+    submitAddDialog(values: any[]) {
+        console.log('values:', values); // Phải là mảng, không phải SubmitEvent
+        // Gọi API add record
+        const apiUrl = `${environment.apiUrl}/${this.selectedTable}/add`;
+        debugger
+        this.http.post(apiUrl, { values }).subscribe(
+            (res) => {
+                Swal.fire('Thành công', 'Đã thêm bản ghi mới!', 'success');
+                this.closeAddDialog();
+                this.loadData();
+            },
+            (err) => {
+                Swal.fire('Lỗi', 'Không thể thêm bản ghi mới!', 'error');
+            }
+        );
     }
 }
