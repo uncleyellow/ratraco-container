@@ -188,7 +188,7 @@ export class ExampleComponent
     
         this.http.post(`${environment.apiUrl}/${this.selectedTable}/write`, payload).subscribe(response => {
             console.log("Dữ liệu cập nhật lên Google Sheets:", response);
-            // this.loadData();
+            this.loadData();
             // Không cần loadData ở đây, vì việc này có thể gây gián đoạn nhập liệu.
             // Dữ liệu sẽ được cập nhật khi người dùng hoàn thành chỉnh sửa hoặc làm mới trang.
         }, error => {
