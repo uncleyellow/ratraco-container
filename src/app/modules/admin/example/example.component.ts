@@ -30,6 +30,9 @@ export class ExampleComponent
         { value: 'kimlien', label: 'Kim Liên' },
         { value: 'giapbat', label: 'Giáp Bát' },
         { value: 'vinh', label: 'Vinh' },
+        { value: 'quangngai', label: 'Quảng Ngãi' },
+        { value: 'nhatrang', label: 'Nha Trang' },
+        { value: 'binhthuan', label: 'Bình Thuận' },
     ];
     columnNames = [
         "STT", 
