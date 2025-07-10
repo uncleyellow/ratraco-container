@@ -4,7 +4,7 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 export const defaultNavigation: FuseNavigationItem[] = [
     {
         id   : 'example',
-        title: 'Chú Trung',
+        title: 'Bảng cho các ga',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/example'
@@ -52,7 +52,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
 export const compactNavigation: FuseNavigationItem[] = [
     {
         id   : 'example',
-        title: 'Chú Trung',
+        title: 'Bảng cho các ga',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/example'
@@ -100,7 +100,7 @@ export const compactNavigation: FuseNavigationItem[] = [
 export const futuristicNavigation: FuseNavigationItem[] = [
     {
         id   : 'example',
-        title: 'Chú Trung',
+        title: 'Bảng cho các ga',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/example'
@@ -148,7 +148,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
 export const horizontalNavigation: FuseNavigationItem[] = [
     {
         id   : 'example',
-        title: 'Chú Trung',
+        title: 'Bảng cho các ga',
         type : 'basic',
         icon : 'heroicons_outline:chart-pie',
         link : '/example'
