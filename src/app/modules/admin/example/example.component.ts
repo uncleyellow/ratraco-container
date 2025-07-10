@@ -371,6 +371,15 @@ export class ExampleComponent
         else if (this.userEmail === 'vinh@gmail.com') {
             this.canEdit = this.selectedTable === 'vinh';
         }
+        else if (this.userEmail === 'nhatrang@gmail.com') {
+            this.canEdit = this.selectedTable === 'nhatrang';
+        }
+        else if (this.userEmail === 'quangngai@gmail.com') {
+            this.canEdit = this.selectedTable === 'quangngai';
+        }
+        else if (this.userEmail === 'binhthuan@gmail.com') {
+            this.canEdit = this.selectedTable === 'binhthuan';
+        }
         else {
             this.canEdit = false;
         }

@@ -191,6 +191,46 @@ export class AuthMockApi
                             }
                         ];
                     }
+                
+                    if ( request.body.email === 'nhatrang@gmail.com' && request.body.password === 'admin' )
+                        {
+                            localStorage.setItem('userEmail', 'nhatrang@gmail.com');
+                            return [
+                                200,
+                                {
+                                    user       : cloneDeep(this._userVinh),
+                                    accessToken: this._generateJWTToken(),
+                                    tokenType  : 'bearer'
+                                }
+                            ];
+                        }
+
+                        if ( request.body.email === 'binhthuan@gmail.com' && request.body.password === 'admin' )
+                            {
+                                localStorage.setItem('userEmail', 'binhthuan@gmail.com');
+                                return [
+                                    200,
+                                    {
+                                        user       : cloneDeep(this._userVinh),
+                                        accessToken: this._generateJWTToken(),
+                                        tokenType  : 'bearer'
+                                    }
+                                ];
+                            }
+
+
+                            if ( request.body.email === 'quangngai@gmail.com' && request.body.password === 'admin' )
+                                {
+                                    localStorage.setItem('userEmail', 'quangngai@gmail.com');
+                                    return [
+                                        200,
+                                        {
+                                            user       : cloneDeep(this._userVinh),
+                                            accessToken: this._generateJWTToken(),
+                                            tokenType  : 'bearer'
+                                        }
+                                    ];
+                                }
                 // Invalid credentials
                 return [
                     404,
