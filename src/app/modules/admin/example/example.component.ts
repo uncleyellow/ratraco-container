@@ -45,7 +45,8 @@ export class ExampleComponent
         "Ngày giờ tàu chạy", 
         "Dừng tại Ga", 
         "Thời gian theo biểu đồ", 
-        "Chênh lệch theo biểu đồ"
+        "Chênh lệch theo biểu đồ",
+        "Giờ cắt nối tại ga"
     ]; // Định nghĩa tên cột dựa trên dữ liệu API
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
@@ -63,6 +64,7 @@ export class ExampleComponent
         "Dừng tại Ga", 
         "Thời gian theo biểu đồ", 
         "Chênh lệch theo biểu đồ", 
+        "Giờ cắt nối tại ga", 
         // "Đến", "Đi", "Số xe có vận đơn của Rat chạy trong tàu Cty khác", "Số hiệu toa xe có vận đơn không phải của Rat", "Ghi chú (ghi rõ số lượng xe cắt, nối)"
     ];
     /**
