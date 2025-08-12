@@ -29,13 +29,13 @@
          </button>
       </div> -->
 
-      <app-add-record-dialog
+      <!-- <app-add-record-dialog
         [columns]="addDialogColumns"
         [selectedTable]="selectedTable"
         [visible]="showAddDialog"
         (close)="closeAddDialog()"
         (success)="loadData()">
-      </app-add-record-dialog>
+      </app-add-record-dialog> -->
 
         <!-- Table Container -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
@@ -47,13 +47,14 @@
                             class="mat-header-cell"
                             [ngClass]="{
                                 'min-w-[150px]': column === 'Mác tàu',
-                                'min-w-[120px]': column === 'Số lượng xe cắt' || column === 'Số lượng xe nối',
-                                'min-w-[180px]': column === 'Ngày giờ tàu đến ga' || column === 'Giờ bắt đầu dồn cắt nối xe' || column === 'Giờ kết thúc cắt nối xe' || column === 'Ngày giờ tàu chạy',
-                                'min-w-[140px]': column === 'Đến' || column === 'Đi',
-                                'min-w-[200px]': column === 'Số xe có vận đơn của Rat chạy trong tàu Cty khác',
-                                'min-w-[220px]': column === 'Số hiệu toa xe có vận đơn không phải của Rat',
-                                'min-w-[250px]': column === 'Ghi chú (ghi rõ số lượng xe cắt, nối)',
-                                'min-w-[130px]': column === 'Dừng tại Ga' || column === 'Thời gian theo biểu đồ' || column === 'Chênh lệch theo biểu đồ'
+                                'min-w-[120px]': column === 'Ngày giờ tàu đến ga',
+                                'min-w-[180px]': column === 'Giờ bắt đầu dồn cắt xe' || column === 'Giờ kết thúc dồn cắt xe' || column === 'Giờ bắt đầu nối xe' || column === 'Giờ kết thúc nối xe',
+                                'min-w-[140px]': column === 'Số lượng xe cắt(ghi rõ số toa xe)' || column === 'Số lượng xe nối(ghi rõ số toa xe)',
+                                'min-w-[200px]': column === 'Ngày giờ tàu chạy',
+                                'min-w-[220px]': column === 'Số xe có vận đơn không phải của RAT',
+                                'min-w-[250px]': column === 'Giờ dồn cắt xe' || column === 'Giờ dồn nối xe',
+                                'min-w-[130px]': column === 'Dừng tại Ga' || column === 'Thời gian theo biểu đồ' || column === 'Chênh lệch theo biểu đồ' || column === 'Tổng số giờ tàu dừng'|| column === 'Dừng đợi(nếu có)',
+                                'min-w-[130px]': column === 'Tổng số giờ tàu dừng' || column === 'Dừng đợi(nếu có)' 
                             }">
                             <div class="line-clamp-2">
                                 {{ column }}
@@ -63,13 +64,13 @@
                             class="mat-cell"
                             [ngClass]="{
                                 'min-w-[150px]': column === 'Mác tàu',
-                                'min-w-[120px]': column === 'Số lượng xe cắt' || column === 'Số lượng xe nối',
-                                'min-w-[180px]': column === 'Ngày giờ tàu đến ga' || column === 'Giờ bắt đầu dồn cắt nối xe' || column === 'Giờ kết thúc cắt nối xe' || column === 'Ngày giờ tàu chạy',
-                                'min-w-[140px]': column === 'Đến' || column === 'Đi',
-                                'min-w-[200px]': column === 'Số xe có vận đơn của Rat chạy trong tàu Cty khác',
-                                'min-w-[220px]': column === 'Số hiệu toa xe có vận đơn không phải của Rat',
-                                'min-w-[250px]': column === 'Ghi chú (ghi rõ số lượng xe cắt, nối)',
-                                'min-w-[130px]': column === 'Dừng tại Ga' || column === 'Thời gian theo biểu đồ' || column === 'Chênh lệch theo biểu đồ'
+                                'min-w-[120px]': column === 'Ngày giờ tàu đến ga',
+                                'min-w-[180px]': column === 'Giờ bắt đầu dồn cắt xe' || column === 'Giờ kết thúc dồn cắt xe' || column === 'Giờ bắt đầu nối xe' || column === 'Giờ kết thúc nối xe',
+                                'min-w-[140px]': column === 'Số lượng xe cắt(ghi rõ số toa xe)' || column === 'Số lượng xe nối(ghi rõ số toa xe)',
+                                'min-w-[200px]': column === 'Ngày giờ tàu chạy',
+                                'min-w-[220px]': column === 'Số xe có vận đơn không phải của RAT',
+                                'min-w-[250px]': column === 'Giờ dồn cắt xe' || column === 'Giờ dồn nối xe',
+                                'min-w-[130px]': column === 'Dừng tại Ga' || column === 'Thời gian theo biểu đồ' || column === 'Chênh lệch theo biểu đồ' || column === 'Tổng số giờ tàu dừng'|| column === 'Dừng đợi(nếu có)'
                             }">
                             <div [ngSwitch]="column">
                                 <!-- Editable Text Columns -->
@@ -95,7 +96,7 @@
                                            placeholder="Chọn ngày giờ tàu đến ga" 
                                            id="ngay-den-ga-{{i}}">
                                 </ng-container>
-                                <ng-container *ngSwitchCase="'Giờ bắt đầu dồn cắt nối xe'">
+                                <ng-container *ngSwitchCase="'Giờ bắt đầu dồn cắt xe'">
                                     <input type="datetime-local" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
@@ -105,7 +106,7 @@
                                            placeholder="Chọn giờ tàu đến" 
                                            id="gio-den-{{i}}">
                                 </ng-container>
-                                <ng-container *ngSwitchCase="'Giờ kết thúc cắt nối xe'">
+                                <ng-container *ngSwitchCase="'Giờ kết thúc dồn cắt xe'">
                                     <input type="datetime-local" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
@@ -115,7 +116,7 @@
                                            placeholder="Chọn thời gian dồn cắt" 
                                            id="bat-dau-don-cat-{{i}}">
                                 </ng-container>
-                                <ng-container *ngSwitchCase="'Kết thúc cắt nối'">
+                                <ng-container *ngSwitchCase="'Giờ bắt đầu nối xe'">
                                     <input type="datetime-local" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
@@ -125,7 +126,7 @@
                                            placeholder="Chọn thời gian kết thúc cắt nối" 
                                            id="ket-thuc-cat-noi-{{i}}">
                                 </ng-container>
-                                <ng-container *ngSwitchCase="'Ngày giờ tàu chạy'">
+                                <ng-container *ngSwitchCase="'Giờ kết thúc nối xe'">
                                     <input type="datetime-local" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
@@ -137,8 +138,8 @@
                                 </ng-container>
 
                                 <!-- Editable Number Columns -->
-                                <ng-container *ngSwitchCase="'Số lượng xe cắt'">
-                                    <input type="number" 
+                                <ng-container *ngSwitchCase="'Số lượng xe cắt(ghi rõ số toa xe)'">
+                                    <input type="text" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
                                            (change)="updateCellValue(element, column, $event.target.value, i)"
@@ -147,8 +148,8 @@
                                            placeholder="Nhập số lượng xe cắt" 
                                            id="so-luong-xe-cat-{{i}}">
                                 </ng-container>
-                                <ng-container *ngSwitchCase="'Số lượng xe nối'">
-                                    <input type="number" 
+                                <ng-container *ngSwitchCase="'Số lượng xe nối(ghi rõ số toa xe)'">
+                                    <input type="text" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
                                            (change)="updateCellValue(element, column, $event.target.value, i)"
@@ -157,9 +158,18 @@
                                            placeholder="Nhập số lượng xe nối" 
                                            id="so-luong-xe-noi-{{i}}">
                                 </ng-container>
-
+                                <ng-container *ngSwitchCase="'Ngày giờ tàu chạy'">
+                                    <input type="datetime-local" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                           [(ngModel)]="element[column]" 
+                                           (change)="updateCellValue(element, column, $event.target.value, i)"
+                                           [value]="element[column]"
+                                           [attr.disabled]="!canEdit ? true : null" 
+                                           placeholder="Chọn thời gian kết thúc cắt nối" 
+                                           id="ngay-gio-tau-chay-{{i}}">
+                                </ng-container>
                                 <!-- Editable Text Columns for additional fields -->
-                                <ng-container *ngSwitchCase="'Đến'">
+                                <!-- <ng-container *ngSwitchCase="'Đến'">
                                     <input type="text" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
@@ -179,10 +189,10 @@
                                            [attr.disabled]="!canEdit ? true : null" 
                                            placeholder="Nhập điểm đi" 
                                            id="di-{{i}}">
-                                </ng-container>
+                                </ng-container> -->
 
-                                <ng-container *ngSwitchCase="'Số xe có vận đơn của Rat chạy trong tàu Cty khác'">
-                                    <input type="number" 
+                                <ng-container *ngSwitchCase="'Số xe có vận đơn không phải của RAT'">
+                                    <input type="text" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
                                            (change)="updateCellValue(element, column, $event.target.value, i)"
@@ -192,29 +202,29 @@
                                            id="so-xe-rat-{{i}}">
                                 </ng-container>
 
-                                <ng-container *ngSwitchCase="'Số hiệu toa xe có vận đơn không phải của Rat'">
-                                    <input type="text" 
+                                <!-- <ng-container *ngSwitchCase="'Giờ dồn cắt xe'">
+                                    <input type="datetime-local" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
                                            (change)="updateCellValue(element, column, $event.target.value, i)"
                                            [value]="element[column]" 
                                            [attr.disabled]="!canEdit ? true : null" 
                                            placeholder="Nhập số hiệu toa xe" 
-                                           id="so-hieu-toa-xe-{{i}}">
+                                           id="gio-don-cat-xe-{{i}}">
                                 </ng-container>
 
-                                <ng-container *ngSwitchCase="'Ghi chú (ghi rõ số lượng xe cắt, nối)'">
-                                    <textarea 
+                                <ng-container *ngSwitchCase="'Giờ dồn nối xe'">
+                                    <input type="datetime-local" 
                                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                            [(ngModel)]="element[column]" 
                                            (change)="updateCellValue(element, column, $event.target.value, i)"
                                            [value]="element[column]" 
                                            [attr.disabled]="!canEdit ? true : null" 
-                                           placeholder="Nhập ghi chú" 
-                                           id="ghi-chu-{{i}}"
-                                           rows="2"></textarea>
-                                </ng-container>
+                                           placeholder="Nhập số hiệu toa xe" 
+                                           id="gio-don-cat-xe-{{i}}">
+                                </ng-container> -->
 
+                            
                                 <!-- Read-only Columns -->
                                 <ng-container *ngSwitchDefault>
                                     <span class="text-gray-700 break-words">{{ element[column] }}</span>

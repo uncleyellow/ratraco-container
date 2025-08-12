@@ -38,34 +38,44 @@ export class ExampleComponent
         "STT", 
         "Mác tàu", 
         "Ngày giờ tàu đến ga", 
-        "Giờ bắt đầu dồn cắt nối xe", 
-        "Giờ kết thúc cắt nối xe", 
-        "Số lượng xe cắt", 
-        "Số lượng xe nối", 
-        "Ngày giờ tàu chạy", 
-        "Dừng tại Ga", 
+        "Giờ bắt đầu dồn cắt xe", 
+        "Giờ kết thúc dồn cắt xe", 
+        "Giờ bắt đầu nối xe", 
+        "Giờ kết thúc nối xe", 
+        "Số lượng xe cắt(ghi rõ số toa xe)", 
+        "Số lượng xe nối(ghi rõ số toa xe)", 
+        "Ngày giờ tàu chạy",
+        "Số xe có vận đơn không phải của RAT",
+        "Giờ dồn cắt xe", 
+        "Giờ dồn nối xe",
+        "Dừng tại Ga",
         "Thời gian theo biểu đồ", 
         "Chênh lệch theo biểu đồ",
-        "Giờ cắt nối tại ga"
+        "Tổng số giờ tàu dừng",
+        "Dừng đợi(nếu có)"
     ]; // Định nghĩa tên cột dựa trên dữ liệu API
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
     showAddDialog = false;
     addDialogColumns: string[] = [
-        "STT",
+        "STT", 
         "Mác tàu", 
         "Ngày giờ tàu đến ga", 
-        "Giờ bắt đầu dồn cắt nối xe", 
-        "Giờ kết thúc cắt nối xe", 
-        "Số lượng xe cắt", 
-        "Số lượng xe nối", 
-        "Ngày giờ tàu chạy", 
-        "Đến", "Đi", "Số xe có vận đơn của Rat chạy trong tàu Cty khác", "Số hiệu toa xe có vận đơn không phải của Rat", "Ghi chú (ghi rõ số lượng xe cắt, nối)",
-        "Dừng tại Ga", 
+        "Giờ bắt đầu dồn cắt xe", 
+        "Giờ kết thúc dồn cắt xe", 
+        "Giờ bắt đầu nối xe", 
+        "Giờ kết thúc nối xe", 
+        "Số lượng xe cắt(ghi rõ số toa xe)", 
+        "Số lượng xe nối(ghi rõ số toa xe)", 
+        "Ngày giờ tàu chạy",
+        "Số xe có vận đơn không phải của RAT",
+        "Giờ dồn cắt xe", 
+        "Giờ dồn nối xe",
+        "Dừng tại Ga",
         "Thời gian theo biểu đồ", 
-        "Chênh lệch theo biểu đồ", 
-        "Giờ cắt nối tại ga", 
-        // "Đến", "Đi", "Số xe có vận đơn của Rat chạy trong tàu Cty khác", "Số hiệu toa xe có vận đơn không phải của Rat", "Ghi chú (ghi rõ số lượng xe cắt, nối)"
+        "Chênh lệch theo biểu đồ",
+        "Tổng số giờ tàu dừng",
+        "Dừng đợi(nếu có)"
     ];
     /**
      * Constructor
@@ -91,20 +101,20 @@ export class ExampleComponent
             console.log("Dữ liệu gốc từ API:", response.data); // Log dữ liệu gốc
 
             if (response.data.length > 0) {
-                this.displayedColumns = this.addDialogColumns.slice(0, 16);
+                this.displayedColumns = this.addDialogColumns.slice(0, 18);
                 console.log("displayedColumns after assignment:", this.displayedColumns); // Thêm log này
                 
                 // Chuyển đổi dữ liệu để Angular Table đọc được
-                this.dataSource.data = response.data.slice(1).map(row => {
+                this.dataSource.data = response.data.slice(0).map(row => {
                     let rowData: any = {};
                     this.displayedColumns.forEach((col, index) => {
                         // Debugging logs for specific columns
-                        if (col === 'Mác tàu' || col === 'Số lượng xe cắt' || col === 'Số lượng xe nối') {
+                        if (col === 'Mác tàu' || col === 'Số lượng xe cắt(ghi rõ số toa xe)' || col === 'Số lượng xe nối(ghi rõ số toa xe)') {
                             console.log(`Column: ${col}, Original Value: ${row[index]}, Index: ${index}`);
                         }
 
                         // Áp dụng parseDateForInput cho các cột ngày giờ cụ thể
-                        if (col === 'Ngày giờ tàu đến ga' || col === 'Giờ bắt đầu dồn cắt nối xe' || col === 'Giờ kết thúc cắt nối xe' || col === 'Kết thúc cắt nối' || col === 'Ngày giờ tàu chạy') {
+                        if (col === 'Ngày giờ tàu đến ga' || col === 'Giờ bắt đầu dồn cắt xe' || col === 'Giờ kết thúc dồn cắt xe' || col === 'Giờ bắt đầu nối xe' || col === 'Giờ kết thúc nối xe' || col === 'Ngày giờ tàu chạy') {
                             const dateStr = row[index];
                             if (dateStr && dateStr.trim() !== '') {
                                 const formattedDate = this.parseDateForInput(dateStr);
@@ -112,13 +122,16 @@ export class ExampleComponent
                             } else {
                                 rowData[col] = '';
                             }
-                        } else if (col === 'STT' || col === 'Số lượng xe cắt' || col === 'Số lượng xe nối') {
+                        } 
+                        else if (col === 'STT' || col === 'Số lượng xe cắt' || col === 'Số lượng xe nối') {
                             // Chuyển đổi sang kiểu số cho các cột số lượng
                             rowData[col] = Number(row[index]);
-                        } else if (col === 'Số xe có vận đơn của Rat chạy trong tàu Cty khác') {
+                        } 
+                        else if (col === 'Số xe có vận đơn của Rat chạy trong tàu Cty khác') {
                             // Chuyển đổi sang kiểu số cho cột số xe Rat
                             rowData[col] = Number(row[index]) || 0;
-                        } else {
+                        } 
+                        else {
                             // Gán giá trị gốc cho các cột khác (ví dụ: Mác tàu, Đến, Đi, Ghi chú, etc.)
                             rowData[col] = String(row[index] || '');
                         }
@@ -146,26 +159,23 @@ export class ExampleComponent
         // Các cột cần gửi lên (Mác tàu, Ngày giờ tàu đến ga, Giờ bắt đầu dồn cắt nối xe, Giờ kết thúc cắt nối xe, Số lượng xe cắt, Số lượng xe nối)
         // Dựa trên thứ tự cột mới
         const editableColumns = [
-            "Mác tàu", 
-            "Ngày giờ tàu đến ga", 
-            "Giờ bắt đầu dồn cắt nối xe", 
-            "Giờ kết thúc cắt nối xe", 
-            "Số lượng xe cắt", 
-            "Số lượng xe nối",
-            "Ngày giờ tàu chạy",
-            // "Dừng tại Ga", 
-            // "Thời gian theo biểu đồ", 
-            // "Chênh lệch theo biểu đồ", 
-            "Đến",
-            "Đi",
-            "Số xe có vận đơn của Rat chạy trong tàu Cty khác",
-            "Số hiệu toa xe có vận đơn không phải của Rat",
-            "Ghi chú (ghi rõ số lượng xe cắt, nối)"
+        "Mác tàu", 
+        "Ngày giờ tàu đến ga", 
+        "Giờ bắt đầu dồn cắt xe", 
+        "Giờ kết thúc dồn cắt xe", 
+        "Giờ bắt đầu nối xe", 
+        "Giờ kết thúc nối xe", 
+        "Số lượng xe cắt(ghi rõ số toa xe)", 
+        "Số lượng xe nối(ghi rõ số toa xe)", 
+        "Ngày giờ tàu chạy",
+        "Số xe có vận đơn không phải của RAT",
         ];
 
         const valuesToSend = editableColumns.map(col => {
             // Đối với các cột ngày giờ, sử dụng giá trị đã định dạng nếu có
-            if (col === 'Ngày giờ tàu đến ga' || col === 'Giờ bắt đầu dồn cắt nối xe' || col === 'Giờ kết thúc cắt nối xe' || col === 'Kết thúc cắt nối' || col === 'Ngày giờ tàu chạy') {
+            if (col === 'Ngày giờ tàu đến ga' 
+                || col === 'Giờ bắt đầu dồn cắt xe' || col === 'Giờ kết thúc dồn cắt xe' 
+                || col === 'Giờ bắt đầu nối xe' || col === 'Giờ kết thúc nối xe' || col === 'Ngày giờ tàu chạy' ) {
                 // Đảm bảo gửi định dạng YYYY/MM/DD HH:mm:ss
                 const date = new Date(element[col]);
                 if (!isNaN(date.getTime())) {
@@ -218,7 +228,7 @@ export class ExampleComponent
 
         console.log(`Cập nhật cột '${column}' với giá trị: '${value}' tại hàng: ${index}`);
         
-        if (column === 'Ngày giờ tàu đến ga' || column === 'Giờ bắt đầu dồn cắt nối xe' || column === 'Giờ kết thúc cắt nối xe' || column === 'Kết thúc cắt nối' || column === 'Ngày giờ tàu chạy') {
+        if (column === 'Ngày giờ tàu đến ga' || column === 'Giờ bắt đầu dồn cắt xe' || column === 'Giờ kết thúc dồn cắt xe' || column === 'Giờ bắt đầu nối xe' || column === 'Giờ kết thúc nối xe' || column === 'Ngày giờ tàu chạy') {
             if (!value) {
                 element[column] = '';
             } else {
@@ -236,10 +246,12 @@ export class ExampleComponent
                     element[column] = '';
                 }
             }
-        } else if (column === 'Số lượng xe cắt' || column === 'Số lượng xe nối' || column === 'Số xe có vận đơn của Rat chạy trong tàu Cty khác') {
-            // Xử lý các cột số
-            element[column] = value ? Number(value) : 0;
-        } else {
+        } 
+        // else if (column === 'Số lượng xe cắt' || column === 'Số lượng xe nối' || column === 'Số xe có vận đơn của Rat chạy trong tàu Cty khác') {
+        //     // Xử lý các cột số
+        //     element[column] = value ? Number(value) : 0;
+        // } 
+        else {
             // Xử lý các cột text (bao gồm cả textarea)
             element[column] = value || '';
         }
