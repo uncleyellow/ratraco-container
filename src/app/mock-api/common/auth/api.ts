@@ -4,8 +4,20 @@ import HmacSHA256 from 'crypto-js/hmac-sha256';
 import Utf8 from 'crypto-js/enc-utf8';
 import { cloneDeep } from 'lodash-es';
 import { FuseMockApiService } from '@fuse/lib/mock-api';
+//admin
 import { user as userData } from 'app/mock-api/common/user/data';
+
 import { vinh as userVinh } from 'app/mock-api/common/user/data';
+import { trangBom as userTrangBom } from 'app/mock-api/common/user/data';
+import { songThan as userSongThan } from 'app/mock-api/common/user/data';
+import { dieuTri as userDieuTri } from 'app/mock-api/common/user/data';
+import { daNang as userDaNang } from 'app/mock-api/common/user/data';
+import { kimLien as userKimLien } from 'app/mock-api/common/user/data';
+import { dongAnh as userDongAnh } from 'app/mock-api/common/user/data';
+import { giapBat as userGiapBat } from 'app/mock-api/common/user/data';
+import { quangNgai as userQuangNgai } from 'app/mock-api/common/user/data';
+import { nhaTrang as userNhaTrang } from 'app/mock-api/common/user/data';
+import { binhThuan as userBinhThuan } from 'app/mock-api/common/user/data';
 @Injectable({
     providedIn: 'root'
 })
@@ -13,7 +25,18 @@ export class AuthMockApi
 {
     private readonly _secret: any;
     private _user: any = userData;
+
     private _userVinh: any = userVinh;
+    private _userTrangBom: any = userTrangBom;
+    private _userSongThan: any = userSongThan;
+    private _userDieuTri: any = userDieuTri;
+    private _userDaNang: any = userDaNang;
+    private _userKimLien: any = userKimLien;
+    private _userDongAnh: any = userDongAnh;
+    private _userGiapBat: any = userGiapBat;
+    private _userQuangNgai: any = userQuangNgai;
+    private _userNhaTrang: any = userNhaTrang;
+    private _userBinhThuan: any = userBinhThuan;
     /**
      * Constructor
      */
@@ -87,7 +110,7 @@ export class AuthMockApi
                         return [
                             200,
                             {
-                                user       : cloneDeep(this._user),
+                                user       : cloneDeep(this._userTrangBom),
                                 accessToken: this._generateJWTToken(),
                                 tokenType  : 'bearer'
                             }
@@ -101,7 +124,7 @@ export class AuthMockApi
                         return [
                             200,
                             {
-                                user       : cloneDeep(this._user),
+                                user       : cloneDeep(this._userSongThan),
                                 accessToken: this._generateJWTToken(),
                                 tokenType  : 'bearer'
                             }
@@ -115,7 +138,7 @@ export class AuthMockApi
                         return [
                             200,
                             {
-                                user       : cloneDeep(this._user),
+                                user       : cloneDeep(this._userDieuTri),
                                 accessToken: this._generateJWTToken(),
                                 tokenType  : 'bearer'
                             }
@@ -129,7 +152,7 @@ export class AuthMockApi
                         return [
                             200,
                             {
-                                user       : cloneDeep(this._user),
+                                user       : cloneDeep(this._userDaNang),
                                 accessToken: this._generateJWTToken(),
                                 tokenType  : 'bearer'
                             }
@@ -143,7 +166,7 @@ export class AuthMockApi
                         return [
                             200,
                             {
-                                user       : cloneDeep(this._user),
+                                user       : cloneDeep(this._userKimLien),
                                 accessToken: this._generateJWTToken(),
                                 tokenType  : 'bearer'
                             }
@@ -157,7 +180,7 @@ export class AuthMockApi
                         return [
                             200,
                             {
-                                user       : cloneDeep(this._user),
+                                user       : cloneDeep(this._userDongAnh),
                                 accessToken: this._generateJWTToken(),
                                 tokenType  : 'bearer'
                             }
@@ -171,7 +194,7 @@ export class AuthMockApi
                         return [
                             200,
                             {
-                                user       : cloneDeep(this._user),
+                                user       : cloneDeep(this._userGiapBat),
                                 accessToken: this._generateJWTToken(),
                                 tokenType  : 'bearer'
                             }
@@ -198,7 +221,7 @@ export class AuthMockApi
                             return [
                                 200,
                                 {
-                                    user       : cloneDeep(this._userVinh),
+                                    user       : cloneDeep(this._userNhaTrang),
                                     accessToken: this._generateJWTToken(),
                                     tokenType  : 'bearer'
                                 }
@@ -211,7 +234,7 @@ export class AuthMockApi
                                 return [
                                     200,
                                     {
-                                        user       : cloneDeep(this._userVinh),
+                                        user       : cloneDeep(this._userBinhThuan),
                                         accessToken: this._generateJWTToken(),
                                         tokenType  : 'bearer'
                                     }
@@ -225,7 +248,7 @@ export class AuthMockApi
                                     return [
                                         200,
                                         {
-                                            user       : cloneDeep(this._userVinh),
+                                            user       : cloneDeep(this._userQuangNgai),
                                             accessToken: this._generateJWTToken(),
                                             tokenType  : 'bearer'
                                         }
