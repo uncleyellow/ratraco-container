@@ -10,8 +10,8 @@
 
     <!-- Main Content -->
     <div class="flex-auto p-6 sm:p-10">
-        <!-- Table Selection -->
-        <div class="mb-6">
+        <!-- Controls -->
+        <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
             <mat-form-field appearance="outline" class="w-full sm:w-96">
                 <mat-label>Chọn bảng dữ liệu</mat-label>
                 <mat-select [(value)]="selectedTable" (selectionChange)="onTableChange($event)">
@@ -20,6 +20,14 @@
                     </mat-option>
                 </mat-select>
                 <mat-icon matSuffix class="text-gray-400">table_chart</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Tìm kiếm</mat-label>
+                <input matInput placeholder="Nhập từ khoá..." [value]="searchValue" (input)="applyFilter($event)" />
+                <button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Xoá tìm kiếm" (click)="searchValue=''; applyFilter($event)">
+                    <mat-icon>close</mat-icon>
+                </button>
             </mat-form-field>
         </div>
 
@@ -40,10 +48,10 @@
         <!-- Table Container -->
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="overflow-x-auto">
-                <table mat-table [dataSource]="dataSource" class="w-full modern-table shadow-lg rounded-lg overflow-hidden">
+                <table mat-table [dataSource]="dataSource" matSort class="w-full modern-table shadow-lg rounded-lg overflow-hidden">
                     <!-- Header Row -->
                     <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-                        <th mat-header-cell *matHeaderCellDef 
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header
                             class="header-cell bg-gradient-to-r from-orange-400 to-orange-500 text-white font-semibold text-sm uppercase tracking-wide"
                             [ngClass]="{
                                 'min-w-[150px]': column === 'Mác tàu',
@@ -258,7 +266,13 @@
                         [ngClass]="{'even-row': i % 2 === 0, 'odd-row': i % 2 === 1}"
                         (mouseenter)="onRowHover(i, true)"
                         (mouseleave)="onRowHover(i, false)"></tr>
-                </table>                
+                </table>
+                
+                <!-- Paginator -->
+                <mat-paginator [pageSize]="pageSizeOptions[0]"
+                               [pageSizeOptions]="pageSizeOptions"
+                               showFirstLastButtons>
+                </mat-paginator>
             </div>
 
             <!-- Loading State -->

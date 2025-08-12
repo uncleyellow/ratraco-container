@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,11 +14,13 @@ import { AddRecordDialogComponent } from '../add-record-dialog/add-record-dialog
     styleUrls    : ['./example.component.scss'],  // Thêm file SCSS ở đây
     encapsulation: ViewEncapsulation.None
 })
-export class ExampleComponent
+export class ExampleComponent implements AfterViewInit
 {
     userEmail: string = ''; // Đảm bảo luôn có giá trị mặc định
     displayedColumns: string[] = [];
     dataSource = new MatTableDataSource<any>([]);
+    searchValue: string = '';
+    readonly pageSizeOptions: number[] = [10, 25, 50, 100];
     selectedTable: string = 'trangbom'; // Default table
     canEdit: boolean = false;
     availableTables = [
@@ -96,6 +98,12 @@ export class ExampleComponent
         console.log("ngOnInit: canEdit after checkPermission =", this.canEdit); // Log sau khi gọi checkPermission
     }
     
+    ngAfterViewInit(): void {
+        // Gắn paginator và sort sau khi view khởi tạo để đảm bảo ViewChild sẵn sàng
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+    }
+    
     loadData(): void {
         this.http.get<{ data: any[][] }>(`${environment.apiUrl}/${this.selectedTable}`).subscribe(response => {
             console.log("Dữ liệu gốc từ API:", response.data); // Log dữ liệu gốc
@@ -144,15 +152,42 @@ export class ExampleComponent
 
                 // Log the final data assigned to the table
                 console.log("Final dataSource.data:", this.dataSource.data);
+                
+                // Tùy biến filter để tìm trong các cột đang hiển thị
+                this.dataSource.filterPredicate = (data: any, filter: string) => {
+                    const normalizedFilter = (filter || '').trim().toLowerCase();
+                    if (!normalizedFilter) return true;
+                    return this.displayedColumns.some((col) => {
+                        const cellValue = String(data[col] ?? '').toLowerCase();
+                        return cellValue.includes(normalizedFilter);
+                    });
+                };
+
+                // Gắn paginator và sort mỗi khi dữ liệu thay đổi
+                if (this.paginator) {
+                    this.dataSource.paginator = this.paginator;
+                    this.paginator.firstPage();
+                }
+                if (this.sort) {
+                    this.dataSource.sort = this.sort;
+                }
             }
         });
     }
 
 
     
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter(event?: Event) {
+        let filterValue = this.searchValue || '';
+        const target = event?.target as HTMLInputElement | undefined;
+        if (target && typeof target.value === 'string') {
+            filterValue = target.value;
+        }
+        this.searchValue = filterValue;
+        this.dataSource.filter = (filterValue || '').trim().toLowerCase();
+        if (this.paginator) {
+            this.paginator.firstPage();
+        }
     }
 
     updateGoogleSheet(element: any, rowIndex: number) {
