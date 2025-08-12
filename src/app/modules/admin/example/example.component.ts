@@ -195,7 +195,7 @@ export class ExampleComponent
         });
 
         const payload = {
-            rowIndex: rowIndex + 6, // Điều chỉnh rowIndex để khớp với Google Sheet (ví dụ: +6 vì dữ liệu bắt đầu từ hàng 7)
+            rowIndex: rowIndex, // Điều chỉnh rowIndex để khớp với Google Sheet (ví dụ: +6 vì dữ liệu bắt đầu từ hàng 7)
             values: valuesToSend
         };
     
