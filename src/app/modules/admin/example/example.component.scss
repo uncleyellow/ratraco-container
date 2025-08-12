@@ -136,4 +136,228 @@
     }
   }
 }
+.modern-table {
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.header-cell {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 2px solid #e5e7eb;
+  padding: 0 !important;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header-cell span {
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.cell-content {
+  padding: 0 !important;
+  vertical-align: middle;
+  position: relative;
+}
+
+.even-row {
+  background-color: #f8fafc;
+}
+
+.odd-row {
+  background-color: white;
+}
+
+.hover-row:hover {
+  background-color: #eff6ff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  z-index: 1;
+  color: #6b7280;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.modern-input {
+  width: 100%;
+  padding: 12px 12px 12px 38px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: white;
+  transition: all 0.2s ease;
+  outline: none;
+  color: #1f2937;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.modern-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #fefefe;
+  transform: translateY(-1px);
+}
+
+.modern-input:focus + .input-icon,
+.modern-input:focus ~ .input-icon {
+  color: #3b82f6;
+}
+
+.modern-input:disabled {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+  color: #6b7280;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.modern-input:disabled + .input-icon,
+.modern-input:disabled ~ .input-icon {
+  color: #9ca3af;
+}
+
+.text-input:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.datetime-input:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.number-input:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.readonly-cell {
+  padding: 12px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.readonly-cell span {
+  padding: 8px 12px;
+  background-color: #f8fafc;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-weight: 500;
+  min-width: 60px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .modern-input {
+      padding: 10px 10px 10px 32px;
+      font-size: 0.8rem;
+  }
   
+  .input-icon {
+      font-size: 0.75rem;
+      left: 10px;
+  }
+  
+  .header-cell span {
+      font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .modern-table {
+      font-size: 0.875rem;
+  }
+  
+  .modern-input {
+      padding: 8px 8px 8px 28px;
+      font-size: 0.75rem;
+  }
+  
+  .input-icon {
+      font-size: 0.7rem;
+      left: 8px;
+  }
+}
+
+/* Loading State */
+.modern-input.loading {
+  background-image: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  background-size: 200px 100%;
+  background-repeat: no-repeat;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+/* Success/Error States */
+.modern-input.success {
+  border-color: #10b981;
+  background-color: #f0fdf4;
+}
+
+.modern-input.error {
+  border-color: #ef4444;
+  background-color: #fef2f2;
+}
+
+/* Animation for row interactions */
+.mat-row {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Scroll improvements */
+.modern-table {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.modern-table::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.modern-table::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.modern-table::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.modern-table::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
