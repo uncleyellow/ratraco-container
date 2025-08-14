@@ -12,6 +12,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { AddRecordDialogComponent } from '../add-record-dialog/add-record-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 const exampleRoutes: Route[] = [
     {
@@ -37,7 +39,9 @@ const exampleRoutes: Route[] = [
         MatSelectModule,
         MatFormFieldModule, 
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ]
 })
 export class ExampleModule

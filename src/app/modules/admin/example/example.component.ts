@@ -7,6 +7,7 @@ import { DataService } from 'app/shared/data.service';
 import Swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
 import { AddRecordDialogComponent } from '../add-record-dialog/add-record-dialog.component';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector     : 'example',
@@ -190,7 +191,7 @@ export class ExampleComponent implements AfterViewInit
         }
     }
 
-    updateGoogleSheet(element: any, rowIndex: number) {
+    updateGoogleSheet(element: any, rowIndex: number, suppressReload: boolean = false) {
         // Các cột cần gửi lên (Mác tàu, Ngày giờ tàu đến ga, Giờ bắt đầu dồn cắt nối xe, Giờ kết thúc cắt nối xe, Số lượng xe cắt, Số lượng xe nối)
         // Dựa trên thứ tự cột mới
         const editableColumns = [
@@ -238,7 +239,9 @@ export class ExampleComponent implements AfterViewInit
     
         this.http.post(`${environment.apiUrl}/${this.selectedTable}/write`, payload).subscribe(response => {
             console.log("Dữ liệu cập nhật lên Google Sheets:", response);
-            this.loadData();
+            if (!suppressReload) {
+                this.loadData();
+            }
             // Không cần loadData ở đây, vì việc này có thể gây gián đoạn nhập liệu.
             // Dữ liệu sẽ được cập nhật khi người dùng hoàn thành chỉnh sửa hoặc làm mới trang.
         }, error => {
@@ -329,6 +332,111 @@ export class ExampleComponent implements AfterViewInit
                 });
             }
         });
+    }
+
+    // Xuất Excel theo các cột đang hiển thị
+    exportToExcel(): void {
+        try {
+            const rowsForExport = this.dataSource.data.map((row: any) => {
+                const exportRow: any = {};
+                this.displayedColumns.forEach((col) => {
+                    exportRow[col] = row[col] ?? '';
+                });
+                return exportRow;
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(rowsForExport, { skipHeader: false });
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+            const fileName = `bang_${this.selectedTable}_${new Date().toISOString().slice(0,10)}.xlsx`;
+            XLSX.writeFile(workbook, fileName);
+        } catch (error: any) {
+            console.error('Lỗi khi xuất Excel:', error);
+            Swal.fire('Lỗi', 'Không thể xuất Excel', 'error');
+        }
+    }
+
+    // Import Excel và tự động cập nhật các hàng theo STT vào bảng đang mở
+    onImportExcel(event: Event): void {
+        if (!this.canEdit) {
+            Swal.fire('Không có quyền', 'Bạn không có quyền cập nhật bảng này', 'warning');
+            (event.target as HTMLInputElement).value = '';
+            return;
+        }
+
+        const input = event.target as HTMLInputElement;
+        const file = input.files && input.files[0];
+        if (!file) {
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+            try {
+                const data = reader.result as ArrayBuffer | string;
+                // Đọc workbook
+                const workbook = XLSX.read(data, { type: typeof data === 'string' ? 'binary' : 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                // Chuyển thành mảng object, key là tiêu đề cột (header)
+                const importedRows: any[] = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+
+                if (!importedRows.length) {
+                    Swal.fire('Thông báo', 'File Excel trống', 'info');
+                    input.value = '';
+                    return;
+                }
+
+                let updatedCount = 0;
+                let skippedCount = 0;
+
+                // Cập nhật theo STT
+                importedRows.forEach((importedRow) => {
+                    const importedStt = String(importedRow['STT'] ?? '').trim();
+                    if (!importedStt) {
+                        skippedCount++;
+                        return;
+                    }
+
+                    const indexInTable = this.dataSource.data.findIndex((r: any) => String(r['STT'] ?? '').trim() === importedStt);
+                    if (indexInTable === -1) {
+                        // Không tìm thấy hàng có STT tương ứng -> bỏ qua (tránh append sai vị trí)
+                        skippedCount++;
+                        return;
+                    }
+
+                    // Gộp dữ liệu: ưu tiên giá trị từ file import (nếu khác rỗng)
+                    const mergedElement: any = { ...this.dataSource.data[indexInTable] };
+                    this.displayedColumns.forEach((col) => {
+                        if (Object.prototype.hasOwnProperty.call(importedRow, col)) {
+                            const newVal = importedRow[col];
+                            if (newVal !== undefined && newVal !== null && String(newVal).trim() !== '') {
+                                mergedElement[col] = newVal;
+                            }
+                        }
+                    });
+
+                    // Gửi cập nhật từng hàng lên server (không reload mỗi lần)
+                    this.updateGoogleSheet(mergedElement, indexInTable, true);
+                    updatedCount++;
+                });
+
+                // Làm sạch input file để cho phép chọn lại cùng 1 file nếu cần
+                input.value = '';
+
+                // Tải lại dữ liệu một lần để phản ánh tất cả thay đổi
+                this.loadData();
+
+                Swal.fire('Hoàn tất', `Đã cập nhật ${updatedCount} hàng. Bỏ qua ${skippedCount} hàng.`, 'success');
+            } catch (err: any) {
+                console.error('Lỗi khi import Excel:', err);
+                Swal.fire('Lỗi', 'Không thể đọc file Excel', 'error');
+                input.value = '';
+            }
+        };
+
+        // Đọc file dưới dạng binary string để tương thích rộng
+        reader.readAsBinaryString(file);
     }
 
     // Hàm parse date cho input datetime-local (YYYY-MM-DDThh:mm)

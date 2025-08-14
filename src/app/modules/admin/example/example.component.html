@@ -31,6 +31,18 @@
             </mat-form-field>
         </div>
 
+        <!-- Export / Import -->
+        <div class="mb-6 flex flex-wrap gap-3">
+            <button (click)="exportToExcel()" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition">
+                Xuất Excel
+            </button>
+
+            <label class="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition cursor-pointer">
+                Nhập Excel
+                <input type="file" accept=".xlsx,.xls" (change)="onImportExcel($event)" hidden />
+            </label>
+        </div>
+
         <!-- <div class="mb-6">
          <button (click)="openAddDialog()" class="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
           Thêm bản ghi
@@ -173,7 +185,8 @@
                                                [(ngModel)]="element[column]" 
                                                (change)="updateCellValue(element, column, $event.target.value, i)"
                                                [value]="element[column]"
-                                               [attr.disabled]="!canEdit ? true : null" 
+                                               [attr.disabled]="!canEdit ? true : null"
+                                               [attr.lang]="'vi'" 
                                                placeholder="Kết thúc nối xe" 
                                                id="gio-ket-thuc-noi-xe-{{i}}"
                                                (focus)="onInputFocus($event)"

@@ -52,6 +52,7 @@
                             ]
                         },
                         "styles": [
+                            "node_modules/flatpickr/dist/flatpickr.min.css",
                             "src/@fuse/styles/tailwind.scss",
                             "src/@fuse/styles/themes.scss",
                             "src/styles/vendors.scss",
