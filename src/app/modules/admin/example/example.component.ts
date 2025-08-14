@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
 import { AddRecordDialogComponent } from '../add-record-dialog/add-record-dialog.component';
 import * as XLSX from 'xlsx';
+import { MatDialog } from '@angular/material/dialog';
+import { RecordDetailDialogComponent } from './record-detail-dialog/record-detail-dialog.component';
 
 @Component({
     selector     : 'example',
@@ -60,6 +62,18 @@ export class ExampleComponent implements AfterViewInit
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
     showAddDialog = false;
+    readonly editableColumns: string[] = [
+        "Mác tàu",
+        "Ngày giờ tàu đến ga",
+        "Giờ bắt đầu dồn cắt xe",
+        "Giờ kết thúc dồn cắt xe",
+        "Giờ bắt đầu nối xe",
+        "Giờ kết thúc nối xe",
+        "Số lượng xe cắt(ghi rõ số toa xe)",
+        "Số lượng xe nối(ghi rõ số toa xe)",
+        "Ngày giờ tàu chạy",
+        "Số xe có vận đơn không phải của RAT",
+    ];
     addDialogColumns: string[] = [
         "STT", 
         "Mác tàu", 
@@ -85,7 +99,8 @@ export class ExampleComponent implements AfterViewInit
      */
     constructor(
         private dataService: DataService,
-        private http: HttpClient
+        private http: HttpClient,
+        private dialog: MatDialog
     )
     {
         // Get email from localStorage
@@ -194,20 +209,7 @@ export class ExampleComponent implements AfterViewInit
     updateGoogleSheet(element: any, rowIndex: number, suppressReload: boolean = false) {
         // Các cột cần gửi lên (Mác tàu, Ngày giờ tàu đến ga, Giờ bắt đầu dồn cắt nối xe, Giờ kết thúc cắt nối xe, Số lượng xe cắt, Số lượng xe nối)
         // Dựa trên thứ tự cột mới
-        const editableColumns = [
-        "Mác tàu", 
-        "Ngày giờ tàu đến ga", 
-        "Giờ bắt đầu dồn cắt xe", 
-        "Giờ kết thúc dồn cắt xe", 
-        "Giờ bắt đầu nối xe", 
-        "Giờ kết thúc nối xe", 
-        "Số lượng xe cắt(ghi rõ số toa xe)", 
-        "Số lượng xe nối(ghi rõ số toa xe)", 
-        "Ngày giờ tàu chạy",
-        "Số xe có vận đơn không phải của RAT",
-        ];
-
-        const valuesToSend = editableColumns.map(col => {
+        const valuesToSend = this.editableColumns.map(col => {
             // Đối với các cột ngày giờ, sử dụng giá trị đã định dạng nếu có
             if (col === 'Ngày giờ tàu đến ga' 
                 || col === 'Giờ bắt đầu dồn cắt xe' || col === 'Giờ kết thúc dồn cắt xe' 
@@ -330,6 +332,43 @@ export class ExampleComponent implements AfterViewInit
                         no-repeat
                     `
                 });
+            }
+        });
+    }
+
+    openDetailDialog(row: any, rowIndex: number): void {
+        const dialogRef = this.dialog.open(RecordDetailDialogComponent, {
+            width: '900px',
+            maxWidth: '95vw',
+            data: {
+                row: { ...row },
+                displayedColumns: this.displayedColumns,
+                editableColumns: this.editableColumns,
+                canEdit: this.canEdit,
+                selectedTable: this.selectedTable,
+                rowIndex
+            }
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (!result) return;
+
+            if (result.action === 'save' && result.row) {
+                // Cập nhật một lần dựa trên dữ liệu đã chỉnh sửa
+                this.updateGoogleSheet(result.row, rowIndex);
+            } else if (result.action === 'delete') {
+                // Gọi xoá nếu backend có endpoint xoá. Nếu chưa, hiện cảnh báo.
+                const apiUrl = `${environment.apiUrl}/${this.selectedTable}/delete`;
+                this.http.post(apiUrl, { rowIndex: rowIndex + 5 }).subscribe(
+                    () => {
+                        Swal.fire('Thành công', 'Đã xoá bản ghi!', 'success');
+                        this.loadData();
+                    },
+                    (err) => {
+                        console.error('Xoá thất bại:', err);
+                        Swal.fire('Lỗi', 'Không thể xoá bản ghi. Kiểm tra lại API /delete.', 'error');
+                    }
+                );
             }
         });
     }

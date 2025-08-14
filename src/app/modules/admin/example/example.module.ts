@@ -14,6 +14,8 @@ import { AddRecordDialogComponent } from '../add-record-dialog/add-record-dialog
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { RecordDetailDialogComponent } from './record-detail-dialog/record-detail-dialog.component';
 
 const exampleRoutes: Route[] = [
     {
@@ -25,7 +27,8 @@ const exampleRoutes: Route[] = [
 @NgModule({
     declarations: [
         ExampleComponent,
-        AddRecordDialogComponent
+        AddRecordDialogComponent,
+        RecordDetailDialogComponent
     ],
     imports     : [
         RouterModule.forChild(exampleRoutes),
@@ -41,7 +44,8 @@ const exampleRoutes: Route[] = [
         ReactiveFormsModule,
         FormsModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        MatDialogModule
     ]
 })
 export class ExampleModule

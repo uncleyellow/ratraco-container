@@ -277,8 +277,9 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" 
                         class="mat-row hover-row"
                         [ngClass]="{'even-row': i % 2 === 0, 'odd-row': i % 2 === 1}"
-                        (mouseenter)="onRowHover(i, true)"
-                        (mouseleave)="onRowHover(i, false)"></tr>
+                         (mouseenter)="onRowHover(i, true)"
+                         (mouseleave)="onRowHover(i, false)"
+                         (click)="openDetailDialog(row, i)"></tr>
                 </table>
                 
                 <!-- Paginator -->

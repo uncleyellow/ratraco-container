@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Chi tiết bản ghi</h2>
+
+<mat-dialog-content class="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+	<div *ngFor="let column of data.displayedColumns" class="flex flex-col gap-1">
+		<label class="text-sm font-semibold text-gray-600">{{ column }}</label>
+		<!-- Editable -->
+		<div *ngIf="isEditable(column); else readOnlyBlock">
+			<!-- DateTime columns: dùng input datetime-local để tương thích bảng -->
+			<input *ngIf="column === 'Ngày giờ tàu đến ga' || column === 'Giờ bắt đầu dồn cắt xe' || column === 'Giờ kết thúc dồn cắt xe' || column === 'Giờ bắt đầu nối xe' || column === 'Giờ kết thúc nối xe' || column === 'Ngày giờ tàu chạy'"
+				type="datetime-local"
+				class="modern-input datetime-input"
+				[(ngModel)]="data.row[column]"
+			/>
+			<!-- Text/Number columns -->
+			<input *ngIf="!(column === 'Ngày giờ tàu đến ga' || column === 'Giờ bắt đầu dồn cắt xe' || column === 'Giờ kết thúc dồn cắt xe' || column === 'Giờ bắt đầu nối xe' || column === 'Giờ kết thúc nối xe' || column === 'Ngày giờ tàu chạy')"
+				type="text"
+				class="modern-input text-input"
+				[(ngModel)]="data.row[column]"
+			/>
+		</div>
+		<!-- Read only -->
+		<ng-template #readOnlyBlock>
+			<div class="readonly-cell px-3 py-2 bg-gray-50 rounded border border-gray-200">
+				{{ data.row[column] || '-' }}
+			</div>
+		</ng-template>
+	</div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="gap-2">
+	<button mat-stroked-button (click)="onCancel()">Đóng</button>
+	<button mat-stroked-button color="warn" *ngIf="data.canEdit" (click)="onDelete()">Xoá</button>
+	<button mat-flat-button color="primary" *ngIf="data.canEdit" (click)="onSave()">Lưu</button>
+</mat-dialog-actions>
+
+
