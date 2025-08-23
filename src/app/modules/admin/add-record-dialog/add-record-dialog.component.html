@@ -1,28 +1,118 @@
-<div *ngIf="visible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-  <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl p-8 relative animate-fade-in">
-    <button (click)="onClose()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
-    <h2 class="text-2xl font-bold mb-6 text-center text-blue-700">Thêm bản ghi mới</h2>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ng-container *ngFor="let col of columns">
-          <div>
-            <label class="block text-gray-700 font-semibold mb-1" [for]="col">{{ col }}</label>
-            <input
-              [id]="col"
-              [formControlName]="col"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-              [type]="col.toLowerCase().includes('ngày') || col.toLowerCase().includes('giờ') ? 'datetime-local' : (col.toLowerCase().includes('số lượng') ? 'number' : 'text')"
-              [placeholder]="'Nhập ' + col"
-              [readonly]="col === 'Dừng tại Ga' || col === 'Thời gian theo biểu đồ' || col === 'Chênh lệch theo biểu đồ'"
-              [required]="!(col === 'Dừng tại Ga' || col === 'Thời gian theo biểu đồ' || col === 'Chênh lệch theo biểu đồ')"
-            />
+<div class="add-record-dialog bg-white rounded-3xl shadow-2xl overflow-hidden border border-orange-100 max-w-7xl w-full mx-auto">
+  <!-- Enhanced Header với gradient cam đẹp hơn -->
+  <div class="dialog-header relative bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500 text-white px-8 py-6">
+    <!-- Decorative background elements -->
+    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/20 via-transparent to-amber-400/20"></div>
+    <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-20 translate-x-20"></div>
+    <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-16 -translate-x-16"></div>
+    
+    <div class="relative z-10 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/30 shadow-xl">
+          <i class="fas fa-plus-circle text-white text-3xl"></i>
+        </div>
+        <div>
+          <h2 class="text-3xl font-bold tracking-tight mb-2">Thêm bản ghi mới</h2>
+          <div class="flex items-center gap-3">
+            <i class="fas fa-table text-orange-100 text-lg"></i>
+            <p class="text-orange-50 text-lg font-medium">Bảng: {{ selectedTableName }}</p>
+          </div>
+        </div>
+      </div>
+      <button (click)="onClose()" 
+              class="w-12 h-12 rounded-xl bg-white/20 hover:bg-white/30 transition-all duration-300 flex items-center justify-center backdrop-blur-sm border border-white/30 hover:scale-110 hover:rotate-90">
+        <i class="fas fa-times text-white text-xl"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Enhanced Form Content với background gradient nhẹ -->
+  <div class="px-8 py-8 bg-gradient-to-br from-orange-25 via-white to-amber-25">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off" class="space-y-8">
+      
+      <!-- Form Fields với grid 4 cột và spacing tốt hơn -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <ng-container *ngFor="let col of editableColumns">
+          <div class="form-field group">
+            <!-- Label với design đẹp hơn -->
+            <label class="block text-gray-800 font-semibold mb-4 flex items-center gap-3 text-base">
+              <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-orange-100 to-amber-100 flex items-center justify-center group-hover:from-orange-200 group-hover:to-amber-200 transition-all duration-300 border border-orange-200">
+                <i class="fas fa-edit text-orange-600 text-sm"></i>
+              </div>
+              <span class="flex-1 text-gray-700">{{ col }}</span>
+            </label>
+            
+            <!-- Enhanced Input Container -->
+            <div class="input-container relative">
+              <!-- DateTime Input -->
+              <input *ngIf="getInputType(col) === 'datetime-local'"
+                     [id]="col"
+                     [formControlName]="col"
+                     type="datetime-local"
+                     class="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-3 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300 bg-white hover:border-orange-400 text-gray-800 font-medium hover:shadow-md text-base placeholder-gray-500"
+                     [placeholder]="getPlaceholder(col)">
+              
+              <!-- Text Input -->
+              <input *ngIf="getInputType(col) === 'text'"
+                     [id]="col"
+                     [formControlName]="col"
+                     type="text"
+                     class="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-3 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300 bg-white hover:border-orange-400 text-gray-800 font-medium shadow-sm hover:shadow-md text-base placeholder-gray-500"
+                     [placeholder]="getPlaceholder(col)">
+              
+              <!-- Number Input -->
+              <input *ngIf="getInputType(col) === 'number'"
+                     [id]="col"
+                     [formControlName]="col"
+                     type="number"
+                     class="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-3 focus:ring-orange-500/30 focus:border-orange-500 transition-all duration-300 bg-white hover:border-orange-400 text-gray-800 font-medium shadow-sm hover:shadow-md text-base placeholder-gray-500"
+                     [placeholder]="getPlaceholder(col)">
+              
+              <!-- Input focus highlight -->
+              <div class="absolute inset-0 rounded-xl pointer-events-none transition-all duration-300 group-focus-within:bg-gradient-to-r group-focus-within:from-orange-50/50 group-focus-within:to-amber-50/50 -z-10"></div>
+            </div>
+            
+            <!-- Field hint -->
+            <div *ngIf="getFieldHint(col)" 
+                 class="mt-3 text-gray-600 text-sm flex items-center gap-2 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
+              <i class="fas fa-info-circle text-blue-500"></i>
+              <span>{{ getFieldHint(col) }}</span>
+            </div>
           </div>
         </ng-container>
       </div>
-      <div class="flex justify-end mt-8 space-x-4">
-        <button type="button" (click)="onClose()" class="px-6 py-2 rounded-lg border border-gray-300 bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Hủy</button>
-        <button type="submit" class="px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition" [disabled]="form.invalid">Thêm</button>
+
+      <!-- Enhanced Form Actions với buttons đẹp hơn -->
+      <div class="flex justify-end gap-6 pt-8 border-t border-orange-200">
+        <button type="button" 
+                (click)="onClose()" 
+                class="px-8 py-4 rounded-xl border-2 border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 hover:shadow-lg transition-all duration-300 font-semibold text-base group min-w-[140px]">
+          <i class="fas fa-times mr-2 group-hover:scale-110 transition-transform duration-300"></i>
+          Hủy
+        </button>
+        <button type="submit" 
+                [disabled]="isLoading"
+                class="px-8 py-4 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg group border-2 border-orange-500 min-w-[180px]">
+          <i class="fas mr-2 transition-all duration-300" 
+             [class.fa-spinner]="isLoading" 
+             [class.fa-plus]="!isLoading"
+             [class.animate-spin]="isLoading"></i>
+          <span>{{ isLoading ? 'Đang thêm...' : 'Thêm bản ghi' }}</span>
+        </button>
       </div>
     </form>
   </div>
-</div> 
+
+  <!-- Enhanced Loading Overlay -->
+  <div *ngIf="isLoading" 
+       class="absolute inset-0 bg-white/95 backdrop-blur-sm flex items-center justify-center rounded-3xl">
+    <div class="text-center">
+      <div class="relative mb-6">
+        <div class="w-16 h-16 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin mx-auto"></div>
+        <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-amber-400 rounded-full animate-spin mx-auto" style="animation-direction: reverse; animation-duration: 1.2s;"></div>
+      </div>
+      <p class="text-gray-700 font-bold text-xl mb-2">Đang thêm bản ghi...</p>
+      <p class="text-gray-500 text-base">Vui lòng chờ trong giây lát</p>
+    </div>
+  </div>
+</div>

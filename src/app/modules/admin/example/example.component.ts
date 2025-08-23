@@ -1784,21 +1784,104 @@ export class ExampleComponent implements AfterViewInit {
     // ==================== DIALOG MANAGEMENT ====================
 
     openAddRecordDialog(): void {
+        if (!this.canEdit) {
+            this.showTablePermissionDeniedMessage();
+            return;
+        }
+
+        if (!this.hasPermissionForCurrentTable()) {
+            this.showTablePermissionDeniedMessage();
+            return;
+        }
+
         const dialogRef = this.dialog.open(AddRecordDialogComponent, {
-            width: '800px',
-            maxWidth: '95vw',
+            width: '95vw',
+            maxWidth: '1200px',
+            height: '95vh',
+            maxHeight: '95vh',
+            disableClose: true,
             data: {
                 displayedColumns: this.displayedColumns,
                 editableColumns: this.editableColumns,
-                selectedTable: this.selectedTable
-            }
+                selectedTable: this.selectedTable,
+                currentData: this.dataSource.data
+            },
+            panelClass: 'add-record-dialog-panel'
         });
 
-        dialogRef.afterClosed().subscribe(async (result) => {
+        dialogRef.afterClosed().subscribe(result => {
             if (result && result.success) {
-                await this.showSuccessMessage('Thành công', 'Đã thêm bản ghi mới!');
-                await this.loadData();
+                this.loadData();
+                this.showDataUpdateNotification();
             }
+        });
+    }
+
+    // Kiểm tra quyền với bảng hiện tại
+    private hasPermissionForCurrentTable(): boolean {
+        // Admin có quyền với tất cả bảng
+        if (this.userEmail === 'kiniemboquenjerry@gmail.com') {
+            return true;
+        }
+
+        // Kiểm tra quyền theo email
+        const tablePermissions: Record<string, string> = {
+            'trangbom@gmail.com': 'trangbom',
+            'songthan@gmail.com': 'songthan',
+            'dieutri@gmail.com': 'dieutri',
+            'danang@gmail.com': 'danang',
+            'kimlien@gmail.com': 'kimlien',
+            'donganh@gmail.com': 'donganh',
+            'giapbat@gmail.com': 'giapbat',
+            'vinh@gmail.com': 'vinh',
+            'nhatrang@gmail.com': 'nhatrang',
+            'quangngai@gmail.com': 'quangngai',
+            'binhthuan@gmail.com': 'binhthuan'
+        };
+        
+        return tablePermissions[this.userEmail] === this.selectedTable;
+    }
+
+    // Hiển thị thông báo không có quyền với bảng
+    private async showTablePermissionDeniedMessage(): Promise<void> {
+        await Swal.fire({
+            title: 'Không có quyền thêm bản ghi',
+            html: `
+                <div class="text-center">
+                    <i class="fas fa-lock text-red-500 text-4xl mb-4"></i>
+                    <p class="text-gray-700 mb-3">
+                        Bạn chỉ có quyền thêm bản ghi vào bảng <strong class="text-orange-600">${this.getTableLabel()}</strong>
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        Email hiện tại: <strong>${this.userEmail}</strong>
+                    </p>
+                </div>
+            `,
+            icon: 'warning',
+            confirmButtonText: 'Đã hiểu',
+            width: 500
+        });
+    }
+
+    // Hiển thị thông báo cập nhật dữ liệu
+    private async showDataUpdateNotification(): Promise<void> {
+        await Swal.fire({
+            title: 'Dữ liệu đã được cập nhật',
+            html: `
+                <div class="text-center">
+                    <i class="fas fa-sync-alt text-green-500 text-4xl mb-4 animate-spin"></i>
+                    <p class="text-gray-700 mb-2">
+                        Bảng <strong class="text-orange-600">${this.getTableLabel()}</strong> đã được làm mới
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        Bản ghi mới đã được thêm vào dữ liệu
+                    </p>
+                </div>
+            `,
+            icon: 'success',
+            timer: 3000,
+            showConfirmButton: false,
+            width: 500
         });
     }
 }
